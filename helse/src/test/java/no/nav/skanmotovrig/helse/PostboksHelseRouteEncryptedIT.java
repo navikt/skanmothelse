@@ -88,12 +88,12 @@ public class PostboksHelseRouteEncryptedIT {
     @Test
     @Disabled
     public void shouldBehandlePostboksHelseEncrptedZip() throws IOException {
-        // BHELSE-20200529-3.zip
-        // OK   - BHELSE-20200529-1-1 xml, pdf
-        // OK   - BHELSE-20200529-1-2 xml, pdf, ocr
-        // FEIL - BHELSE-20200529-1-3 xml, pdf, ocr (valideringsfeil xml)
-        // FEIL - BHELSE-20200529-1-4 xml, ocr (mangler pdf)
-        // FEIL - BHELSE-20200529-1-5 pdf, ocr (mangler xml)
+        // BHELSE-20200529-3.enc.zip
+        // OK   - BHELSE-20200529-3-1 xml, pdf
+        // OK   - BHELSE-20200529-3-2 xml, pdf, ocr
+        // FEIL - BHELSE-20200529-3-3 xml, pdf, ocr (valideringsfeil xml)
+        // FEIL - BHELSE-20200529-3-4 xml, ocr (mangler pdf)
+        // FEIL - BHELSE-20200529-3-5 pdf, ocr (mangler xml)
 
         copyFileFromClasspathToInngaaende("BHELSE-20200529-3.enc.zip");
         setUpHappyStubs();
@@ -120,12 +120,12 @@ public class PostboksHelseRouteEncryptedIT {
 
     @Test
     public void shouldBehandlePostboksHelseEncryptedZipWithMultipleDotsInFilenames() throws IOException {
-        // BHELSE.20200529-3.zip
-        // OK   - BHELSE.20200529-2-1 xml, pdf
-        // OK   - BHELSE.20200529-2-2 xml, pdf, ocr
-        // FEIL - BHELSE.20200529-2-3 xml, pdf, ocr (valideringsfeil xml)
-        // FEIL - BHELSE.20200529-2-4 xml, ocr (mangler pdf)
-        // FEIL - BHELSE.20200529-2-5 pdf, ocr (mangler xml)
+        // BHELSE.20200529-3.enc.zip
+        // OK   - BHELSE.20200529-3-1 xml, pdf
+        // OK   - BHELSE.20200529-3-2 xml, pdf, ocr
+        // FEIL - BHELSE.20200529-3-3 xml, pdf, ocr (valideringsfeil xml)
+        // FEIL - BHELSE.20200529-3-4 xml, ocr (mangler pdf)
+        // FEIL - BHELSE.20200529-3-5 pdf, ocr (mangler xml)
 
         copyFileFromClasspathToInngaaende("BHELSE.20200529-3.enc.zip");
         setUpHappyStubs();

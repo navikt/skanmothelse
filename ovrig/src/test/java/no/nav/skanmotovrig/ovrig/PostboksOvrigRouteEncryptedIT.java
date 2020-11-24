@@ -82,13 +82,13 @@ public class PostboksOvrigRouteEncryptedIT {
 
     @Test
     public void shouldBehandlePostboksOvrigZip() throws IOException {
-        // OVRIG-20200529-1.zip
-        // OK   - OVRIG-20200529-1-1 alle felt
-        // OK   - OVRIG-20200529-1-2 kun påkrevde felt
-        // OK   - OVRIG-20200529-1-3 tomme valgfri felt
-        // FEIL - OVRIG-20200529-1-4 xml (mangler pdf)
-        // FEIL - OVRIG-20200529-1-5 pdf (mangler xml)
-        // FEIL - OVRIG-20200529-1-6 malformet xml
+        // OVRIG-20200529-2.enc.zip
+        // OK   - OVRIG-20200529-2-1 alle felt
+        // OK   - OVRIG-20200529-2-2 kun påkrevde felt
+        // OK   - OVRIG-20200529-2-3 tomme valgfri felt
+        // FEIL - OVRIG-20200529-2-4 xml (mangler pdf)
+        // FEIL - OVRIG-20200529-2-5 pdf (mangler xml)
+        // FEIL - OVRIG-20200529-2-6 malformet xml
 
         final String ZIP_FILE_NAME_NO_EXTENSION = "OVRIG-20200529-2";
 
@@ -115,13 +115,13 @@ public class PostboksOvrigRouteEncryptedIT {
 
     @Test
     public void shouldBehandlePostboksOvrigZipWithMultipleDotsInFilenames() throws IOException {
-        // OVRIG.20200529-2.enc.zip
-        // OK   - OVRIG.20200529-2-1 alle felt
-        // OK   - OVRIG.20200529-2-2 kun påkrevde felt
-        // OK   - OVRIG.20200529-2-3 tomme valgfri felt
-        // FEIL - OVRIG.20200529-2-4 xml (mangler pdf)
-        // FEIL - OVRIG.20200529-2-5 pdf (mangler xml)
-        // FEIL - OVRIG.20200529-2-6 malformet xml
+        // OVRIG.20200529-3.enc.enc.zip
+        // OK   - OVRIG.20200529-3-1 alle felt
+        // OK   - OVRIG.20200529-3-2 kun påkrevde felt
+        // OK   - OVRIG.20200529-3-3 tomme valgfri felt
+        // FEIL - OVRIG.20200529-3-4 xml (mangler pdf)
+        // FEIL - OVRIG.20200529-3-5 pdf (mangler xml)
+        // FEIL - OVRIG.20200529-3-6 malformet xml
 
         final String ZIP_FILE_NAME_NO_EXTENSION = "OVRIG.20200529-3";
 
@@ -148,14 +148,14 @@ public class PostboksOvrigRouteEncryptedIT {
 
     @Test
     public void shouldBehandleZipXmlOrderedLastWithinCompletionTimeout() throws IOException {
-        // OVRIG-XML-ORDERED-FIRST-1.zip
-        // OK   - OVRIG-XML-ORDERED-FIRST-1-01 alle felt
-        // OK   - OVRIG-XML-ORDERED-FIRST-1-02 kun påkrevde felt
-        // OK   - OVRIG-XML-ORDERED-FIRST-1-03 tomme valgfri felt
-        // FEIL - OVRIG-XML-ORDERED-FIRST-1-04 xml (mangler pdf)
-        // FEIL - OVRIG-XML-ORDERED-FIRST-1-05 pdf (mangler xml)
-        // FEIL - OVRIG-XML-ORDERED-FIRST-1-06 malformet xml
-        // OK   - OVRIG-XML-ORDERED-FIRST-1-07 alle felt
+        // OVRIG-XML-ORDERED-FIRST-2.enc.zip
+        // OK   - OVRIG-XML-ORDERED-FIRST-2-01 alle felt
+        // OK   - OVRIG-XML-ORDERED-FIRST-2-02 kun påkrevde felt
+        // OK   - OVRIG-XML-ORDERED-FIRST-2-03 tomme valgfri felt
+        // FEIL - OVRIG-XML-ORDERED-FIRST-2-04 xml (mangler pdf)
+        // FEIL - OVRIG-XML-ORDERED-FIRST-2-05 pdf (mangler xml)
+        // FEIL - OVRIG-XML-ORDERED-FIRST-2-06 malformet xml
+        // OK   - OVRIG-XML-ORDERED-FIRST-2-07 alle felt
         // ...
         // OK   - OVRIG-XML-ORDERED-FIRST-1-59 alle felt
 
