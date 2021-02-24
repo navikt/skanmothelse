@@ -34,6 +34,7 @@ spec:
     enabled: true
     path: /actuator/prometheus
   readiness:
+    path: /isReady
     port: 8080
     initialDelay: 30
     timeout: 3
