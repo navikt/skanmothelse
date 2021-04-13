@@ -131,13 +131,19 @@ public class OpprettJournalpostPostboksOvrigRequestMapper {
 	}
 
 	private Bruker mapBruker(no.nav.skanmotovrig.ovrig.domain.Bruker jpBruker) {
-		if (ORGANISASJON.equalsIgnoreCase(jpBruker.getBrukertype()) && UKJENT_BRUKER.equals(jpBruker.getBrukerId())) {
+		boolean orgranisasjonsBruker = isBrukerOrganisasjon(jpBruker);
+
+		if (orgranisasjonsBruker && UKJENT_BRUKER.equals(jpBruker.getBrukerId())) {
 			return null;
 		}
 
 		return Bruker.builder()
-				.idType(jpBruker.getBrukertype().equalsIgnoreCase(ORGANISASJON) ? ORGNR : FNR)
+				.idType(orgranisasjonsBruker ? ORGNR : FNR)
 				.id(jpBruker.getBrukerId())
 				.build();
+	}
+
+	private boolean isBrukerOrganisasjon(no.nav.skanmotovrig.ovrig.domain.Bruker jpBruker) {
+		return ORGANISASJON.equalsIgnoreCase(jpBruker.getBrukertype());
 	}
 }
