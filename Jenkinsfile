@@ -1,5 +1,5 @@
 naiseratorPipeline {
-    applicationName = "skanmotovrig"
+    applicationName = "skanmothelse"
     dockerfileDir = "."
     deployEnvironmentQ = "dev"
 }
