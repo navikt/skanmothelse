@@ -11,9 +11,9 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @ToString
-@ConfigurationProperties("skanmotovrig.vault")
+@ConfigurationProperties("skanmothelse.vault")
 @Validated
-public class SkanmotovrigVaultProperties {
+public class SkanmothelseVaultProperties {
 
     @NotBlank
     private String secretpath;

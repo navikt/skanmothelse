@@ -5,9 +5,7 @@ import lombok.Getter;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author Joakim Bjørnstad, Jbit AS
- */
+
 public class PostboksHelseTema {
     private static final Map<String, PostboksHelse> postbokser = new HashMap<>();
 

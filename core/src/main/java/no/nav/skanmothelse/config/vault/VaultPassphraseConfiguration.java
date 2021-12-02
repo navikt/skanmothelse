@@ -7,8 +7,8 @@ import org.springframework.vault.annotation.VaultPropertySource;
 
 @Configuration
 @VaultPropertySource(
-        value = "${skanmotovrig.vault.secretpath}",
-        propertyNamePrefix = "skanmotovrig.secret.",
+        value = "${skanmothelse.vault.secretpath}",
+        propertyNamePrefix = "skanmothelse.secret.",
         ignoreSecretNotFound = false
 )
 @ConditionalOnProperty("spring.cloud.vault.enabled")

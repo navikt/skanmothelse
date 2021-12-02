@@ -3,9 +3,7 @@ package no.nav.skanmothelse.utils;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.LocalDate;
 
-/**
- * @author Joakim Bjørnstad, Jbit AS
- */
+
 public class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
 
     @Override

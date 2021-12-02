@@ -33,7 +33,7 @@ public class ZipSplitterEncrypted extends ZipSplitter {
     private final String passphrase;
 
     @Inject
-    public ZipSplitterEncrypted(@Value("${skanmotovrig.secret.passphrase}") String passphrase) {
+    public ZipSplitterEncrypted(@Value("${skanmothelse.secret.passphrase}") String passphrase) {
         this.passphrase = passphrase;
     }
 

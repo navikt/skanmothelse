@@ -7,9 +7,7 @@ import no.nav.skanmothelse.helse.domain.Skanningmetadata;
 
 import java.time.LocalDate;
 
-/**
- * @author Joakim Bjørnstad, Jbit AS
- */
+
 public class PostboksHelseEnvelopeTestObjects {
     public static final String FILEBASENAME = "pb1411";
     public static final String ZIPNAME = "pb1411.zip";

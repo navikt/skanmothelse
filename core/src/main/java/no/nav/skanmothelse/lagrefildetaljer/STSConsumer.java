@@ -1,8 +1,8 @@
 package no.nav.skanmothelse.lagrefildetaljer;
 
-import no.nav.skanmothelse.config.properties.SkanmotovrigProperties;
-import no.nav.skanmothelse.exceptions.functional.SkanmotovrigFunctionalException;
-import no.nav.skanmothelse.exceptions.technical.SkanmotovrigTechnicalException;
+import no.nav.skanmothelse.config.properties.SkanmothelseProperties;
+import no.nav.skanmothelse.exceptions.functional.SkanmothelseFunctionalException;
+import no.nav.skanmothelse.exceptions.technical.SkanmothelseTechnicalException;
 import no.nav.skanmothelse.lagrefildetaljer.data.STSResponse;
 import no.nav.skanmothelse.metrics.Metrics;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -37,12 +37,12 @@ public class STSConsumer {
 
 	public STSConsumer(
 			RestTemplateBuilder restTemplateBuilder,
-			SkanmotovrigProperties skanmotovrigProperties
+			SkanmothelseProperties skanmothelseProperties
 	) {
-		this.stsUrl = skanmotovrigProperties.getStsurl();
+		this.stsUrl = skanmothelseProperties.getStsurl();
 		this.restTemplate = restTemplateBuilder
-				.basicAuthentication(skanmotovrigProperties.getServiceuser().getUsername(),
-						skanmotovrigProperties.getServiceuser().getPassword())
+				.basicAuthentication(skanmothelseProperties.getServiceuser().getUsername(),
+						skanmothelseProperties.getServiceuser().getPassword())
 				.setReadTimeout(Duration.ofMillis(5000L))
 				.setConnectTimeout(Duration.ofMillis(5000L))
 				.build();
@@ -60,10 +60,10 @@ public class STSConsumer {
 					.getBody();
 
 		} catch (HttpClientErrorException e) {
-			throw new SkanmotovrigFunctionalException(String.format("getSTSToken feilet funksjonelt med statusKode=%s. Feilmelding=%s", e
+			throw new SkanmothelseFunctionalException(String.format("getSTSToken feilet funksjonelt med statusKode=%s. Feilmelding=%s", e
 					.getStatusCode(), e.getMessage()), e);
 		} catch (HttpServerErrorException e) {
-			throw new SkanmotovrigTechnicalException(String.format("getSTSToken feilet teknisk med statusKode=%s. Feilmelding=%s", e
+			throw new SkanmothelseTechnicalException(String.format("getSTSToken feilet teknisk med statusKode=%s. Feilmelding=%s", e
 					.getStatusCode(), e.getMessage()), e);
 		}
 	}

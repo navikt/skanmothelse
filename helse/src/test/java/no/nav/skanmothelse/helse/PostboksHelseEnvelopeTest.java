@@ -22,9 +22,7 @@ import static no.nav.skanmothelse.helse.PostboksHelseEnvelopeTestObjects.createE
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-/**
- * @author Joakim Bjørnstad, Jbit AS
- */
+
 class PostboksHelseEnvelopeTest {
 
     @Test

@@ -1,7 +1,7 @@
 package no.nav.skanmothelse.helse;
 
 import lombok.extern.slf4j.Slf4j;
-import no.nav.skanmothelse.exceptions.technical.SkanmotovrigTechnicalException;
+import no.nav.skanmothelse.exceptions.technical.SkanmothelseTechnicalException;
 import org.apache.camel.AggregationStrategy;
 import org.apache.camel.Exchange;
 import org.apache.commons.io.IOUtils;
@@ -13,9 +13,7 @@ import static no.nav.skanmothelse.helse.PostboksHelseRoute.PROPERTY_FORSENDELSE_
 import static org.apache.commons.io.FilenameUtils.getBaseName;
 import static org.apache.commons.io.FilenameUtils.getExtension;
 
-/**
- * @author Joakim Bjørnstad, Jbit AS
- */
+
 @Slf4j
 public class PostboksHelseSkanningAggregator implements AggregationStrategy {
     public static final String XML_EXTENSION = "xml";
@@ -36,7 +34,7 @@ public class PostboksHelseSkanningAggregator implements AggregationStrategy {
             applyOnEnvelope(newExchange, envelope);
             return oldExchange;
         } catch (IOException e) {
-            throw new SkanmotovrigTechnicalException("Klarte ikke lese fil", e);
+            throw new SkanmothelseTechnicalException("Klarte ikke lese fil", e);
         }
     }
 

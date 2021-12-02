@@ -1,6 +1,6 @@
 package no.nav.skanmothelse.helse;
 
-import no.nav.skanmothelse.exceptions.functional.SkanmotovrigFunctionalException;
+import no.nav.skanmothelse.exceptions.functional.SkanmothelseFunctionalException;
 import no.nav.skanmothelse.helse.domain.Journalpost;
 import no.nav.skanmothelse.helse.domain.Skanninginfo;
 import no.nav.skanmothelse.helse.domain.Skanningmetadata;
@@ -43,7 +43,7 @@ public class OpprettJournalpostPostboksHelseRequestMapper {
         final String strekkodePostboks = envelope.getSkanningmetadata().getSkanninginfo().getStrekkodePostboks();
         final PostboksHelseTema.PostboksHelse postboks = PostboksHelseTema.lookup(strekkodePostboks);
         if (postboks == null) {
-            throw new SkanmotovrigFunctionalException("Fant ikke postboks metadata for strekkodePostboks=" + strekkodePostboks);
+            throw new SkanmothelseFunctionalException("Fant ikke postboks metadata for strekkodePostboks=" + strekkodePostboks);
         }
         return doMap(envelope, postboks);
     }

@@ -4,13 +4,10 @@ import no.nav.skanmothelse.mdc.MDCConstants;
 import org.slf4j.MDC;
 import org.springframework.http.HttpHeaders;
 
-/**
- * @author Joakim Bjørnstad, Jbit AS
- */
 public class NavHeaders {
     public static final String HEADER_NAV_CALL_ID = "Nav-Callid";
     public static final String HEADER_NAV_CONSUMER_ID = "Nav-Consumer-Id";
-    public static final String APP_NAME = "skanmotovrig";
+    public static final String APP_NAME = "skanmothelse";
 
     public static HttpHeaders createNavCustomHeaders() {
         HttpHeaders headers = new HttpHeaders();

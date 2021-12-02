@@ -10,9 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 
-/**
- * @author Joakim Bjørnstad, Jbit AS
- */
+
 @Slf4j
 @Component
 public class PostboksHelseService {

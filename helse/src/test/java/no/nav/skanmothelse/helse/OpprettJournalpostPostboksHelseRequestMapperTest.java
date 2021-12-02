@@ -36,9 +36,7 @@ import static no.nav.skanmothelse.helse.PostboksHelseTema.PostboksHelse.PB_1411;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
-/**
- * @author Joakim Bjørnstad, Jbit AS
- */
+
 class OpprettJournalpostPostboksHelseRequestMapperTest {
     private final OpprettJournalpostPostboksHelseRequestMapper mapper = new OpprettJournalpostPostboksHelseRequestMapper();
 

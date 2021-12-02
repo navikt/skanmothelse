@@ -2,7 +2,7 @@ package no.nav.skanmothelse.metrics;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
-import no.nav.skanmothelse.exceptions.functional.AbstractSkanmotovrigFunctionalException;
+import no.nav.skanmothelse.exceptions.functional.AbstractSkanmothelseFunctionalException;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Component
 public class DokCounter {
-    private static final String DOK_SKANMOTOVRIG = "dok_skanmotovrig_";
+    private static final String DOK_SKANMOTHELSE = "dok_skanmothelse_";
     private static final String TOTAL = "_total";
     private static final String EXCEPTION = "exception";
     private static final String ERROR_TYPE = "error_type";
@@ -21,7 +21,6 @@ public class DokCounter {
     public static final String DOMAIN = "domain";
     public static final String CORE = "core";
     public static final String HELSE = "helse";
-    public static final String OVRIG = "ovrig";
 
     private static MeterRegistry meterRegistry;
     @Inject
@@ -34,7 +33,7 @@ public class DokCounter {
     }
 
     public static void incrementCounter(String key, List<String> tags) {
-        Counter.builder(DOK_SKANMOTOVRIG + key + TOTAL)
+        Counter.builder(DOK_SKANMOTHELSE + key + TOTAL)
                 .tags(tags.toArray(new String[0]))
                 .register(meterRegistry)
                 .increment();
@@ -42,14 +41,14 @@ public class DokCounter {
 
 
     private static void incrementCounter(String key, String value) {
-        Counter.builder(DOK_SKANMOTOVRIG + key + TOTAL)
+        Counter.builder(DOK_SKANMOTHELSE + key + TOTAL)
                 .tags(key, value)
                 .register(meterRegistry)
                 .increment();
     }
 
     public static void incrementError(Throwable throwable, String domain){
-        Counter.builder(DOK_SKANMOTOVRIG + EXCEPTION)
+        Counter.builder(DOK_SKANMOTHELSE + EXCEPTION)
                 .tags(ERROR_TYPE, isFunctionalException(throwable) ? FUNCTIONAL_ERROR : TECHNICAL_ERROR)
                 .tags(EXCEPTION_NAME, throwable.getClass().getSimpleName())
                 .tag(DOMAIN, isEmptyString(domain) ? CORE : domain)
@@ -58,7 +57,7 @@ public class DokCounter {
     }
 
     private static boolean isFunctionalException(Throwable e) {
-        return e instanceof AbstractSkanmotovrigFunctionalException;
+        return e instanceof AbstractSkanmothelseFunctionalException;
     }
 
     private static boolean isEmptyString(String string) {

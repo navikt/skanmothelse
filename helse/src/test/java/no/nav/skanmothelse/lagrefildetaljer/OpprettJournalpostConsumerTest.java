@@ -1,7 +1,7 @@
 package no.nav.skanmothelse.lagrefildetaljer;
 
-import no.nav.skanmothelse.config.properties.SkanmotovrigProperties;
-import no.nav.skanmothelse.exceptions.functional.SkanmotovrigFunctionalException;
+import no.nav.skanmothelse.config.properties.SkanmothelseProperties;
+import no.nav.skanmothelse.exceptions.functional.SkanmothelseFunctionalException;
 import no.nav.skanmothelse.helse.AbstractIt;
 import no.nav.skanmothelse.lagrefildetaljer.data.OpprettJournalpostRequest;
 import no.nav.skanmothelse.lagrefildetaljer.data.OpprettJournalpostResponse;
@@ -24,7 +24,7 @@ class OpprettJournalpostConsumerTest extends AbstractIt {
 	OpprettJournalpostConsumer opprettJournalpostConsumer;
 
 	@Autowired
-	private SkanmotovrigProperties properties;
+	private SkanmothelseProperties properties;
 
 
 	@Test
@@ -41,7 +41,7 @@ class OpprettJournalpostConsumerTest extends AbstractIt {
 		StubOpprettJournalpostResponseConflictWithInvalidResponse();
 
 		assertThrows(
-				SkanmotovrigFunctionalException.class,
+				SkanmothelseFunctionalException.class,
 				() -> opprettJournalpostConsumer.opprettJournalpost("token", null)
 		);
 		verify(exactly(5), postRequestedFor(urlMatching("/rest/journalpostapi/v1/journalpost\\?foersoekFerdigstill=false")));

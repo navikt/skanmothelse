@@ -1,8 +1,8 @@
 package no.nav.skanmothelse;
 
 import io.micrometer.core.instrument.MeterRegistry;
-import no.nav.skanmothelse.config.properties.SkanmotovrigProperties;
-import no.nav.skanmothelse.config.properties.SkanmotovrigVaultProperties;
+import no.nav.skanmothelse.config.properties.SkanmothelseProperties;
+import no.nav.skanmothelse.config.properties.SkanmothelseVaultProperties;
 import no.nav.skanmothelse.metrics.DokTimedAspect;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -16,8 +16,8 @@ import org.springframework.retry.annotation.EnableRetry;
 @EnableAutoConfiguration
 @EnableAspectJAutoProxy
 @EnableConfigurationProperties({
-        SkanmotovrigProperties.class,
-        SkanmotovrigVaultProperties.class
+        SkanmothelseProperties.class,
+        SkanmothelseVaultProperties.class
 })
 @EnableRetry
 @Configuration

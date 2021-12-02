@@ -3,9 +3,9 @@ package no.nav.skanmothelse.lagrefildetaljer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.skanmothelse.config.properties.SkanmotovrigProperties;
-import no.nav.skanmothelse.exceptions.functional.SkanmotovrigFunctionalException;
-import no.nav.skanmothelse.exceptions.technical.SkanmotovrigTechnicalException;
+import no.nav.skanmothelse.config.properties.SkanmothelseProperties;
+import no.nav.skanmothelse.exceptions.functional.SkanmothelseFunctionalException;
+import no.nav.skanmothelse.exceptions.technical.SkanmothelseTechnicalException;
 import no.nav.skanmothelse.lagrefildetaljer.data.OpprettJournalpostRequest;
 import no.nav.skanmothelse.lagrefildetaljer.data.OpprettJournalpostResponse;
 import no.nav.skanmothelse.metrics.Metrics;
@@ -39,10 +39,10 @@ public class OpprettJournalpostConsumer {
 
 	public OpprettJournalpostConsumer(
 			RestTemplateBuilder restTemplateBuilder,
-			SkanmotovrigProperties skanmotovrigProperties,
+			SkanmothelseProperties skanmothelseProperties,
 			ObjectMapper mapper
 	) {
-		this.dokarkivJournalpostUrl = skanmotovrigProperties.getDokarkivjournalposturl();
+		this.dokarkivJournalpostUrl = skanmothelseProperties.getDokarkivjournalposturl();
 		this.mapper = mapper;
 		this.restTemplate = restTemplateBuilder
 				.setReadTimeout(Duration.ofSeconds(150))
@@ -66,13 +66,13 @@ public class OpprettJournalpostConsumer {
 							journalpost.getJournalpostId());
 					return journalpost;
 				} catch (JsonProcessingException jsonProcessingException) {
-					throw new SkanmotovrigFunctionalException("Ikke mulig å konvertere respons ifra dokarkiv.", e);
+					throw new SkanmothelseFunctionalException("Ikke mulig å konvertere respons ifra dokarkiv.", e);
 				}
 			}
-			throw new SkanmotovrigFunctionalException(String.format("opprettJournalpost feilet funksjonelt med statusKode=%s. Feilmelding=%s", e
+			throw new SkanmothelseFunctionalException(String.format("opprettJournalpost feilet funksjonelt med statusKode=%s. Feilmelding=%s", e
 					.getStatusCode(), e.getMessage()), e);
 		} catch (HttpServerErrorException e) {
-			throw new SkanmotovrigTechnicalException(String.format("opprettJournalpost feilet teknisk med statusKode=%s. Feilmelding=%s", e
+			throw new SkanmothelseTechnicalException(String.format("opprettJournalpost feilet teknisk med statusKode=%s. Feilmelding=%s", e
 					.getStatusCode(), e.getMessage()), e);
 		}
 	}

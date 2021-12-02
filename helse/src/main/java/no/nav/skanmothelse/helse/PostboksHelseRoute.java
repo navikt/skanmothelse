@@ -1,8 +1,8 @@
 package no.nav.skanmothelse.helse;
 
 import lombok.extern.slf4j.Slf4j;
-import no.nav.skanmothelse.config.properties.SkanmotovrigProperties;
-import no.nav.skanmothelse.exceptions.functional.AbstractSkanmotovrigFunctionalException;
+import no.nav.skanmothelse.config.properties.SkanmothelseProperties;
+import no.nav.skanmothelse.exceptions.functional.AbstractSkanmothelseFunctionalException;
 import no.nav.skanmothelse.metrics.DokCounter;
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
@@ -14,9 +14,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author Joakim Bjørnstad, Jbit AS
- */
+
 @Slf4j
 @Component
 public class PostboksHelseRoute extends RouteBuilder {
@@ -26,13 +24,13 @@ public class PostboksHelseRoute extends RouteBuilder {
     public static final String KEY_LOGGING_INFO = "fil=${exchangeProperty." + PROPERTY_FORSENDELSE_FILEBASENAME + "}, batch=${exchangeProperty." + PROPERTY_FORSENDELSE_BATCHNAVN + "}";
     static final int FORVENTET_ANTALL_PER_FORSENDELSE = 3;
 
-    private final SkanmotovrigProperties skanmotovrigProperties;
+    private final SkanmothelseProperties skanmothelseProperties;
     private final PostboksHelseService postboksHelseService;
 
     @Inject
-    public PostboksHelseRoute(PostboksHelseService postboksHelseService, SkanmotovrigProperties skanmotovrigProperties) {
+    public PostboksHelseRoute(PostboksHelseService postboksHelseService, SkanmothelseProperties skanmothelseProperties) {
         this.postboksHelseService = postboksHelseService;
-        this.skanmotovrigProperties = skanmotovrigProperties;
+        this.skanmothelseProperties = skanmothelseProperties;
     }
 
     @Override
@@ -47,7 +45,7 @@ public class PostboksHelseRoute extends RouteBuilder {
                 .log(LoggingLevel.ERROR, log, "Skanmothelse skrev feiletzip=${header." + Exchange.FILE_NAME_PRODUCED + "} til feilmappe. " + KEY_LOGGING_INFO + ".");
 
         // Kjente funksjonelle feil
-        onException(AbstractSkanmotovrigFunctionalException.class)
+        onException(AbstractSkanmothelseFunctionalException.class)
                 .handled(true)
                 .process(new MdcSetterProcessor())
                 .process(new ErrorMetricsProcessor())
@@ -56,8 +54,8 @@ public class PostboksHelseRoute extends RouteBuilder {
                 .to("direct:avvik")
                 .log(LoggingLevel.WARN, log, "Skanmothelse skrev feiletzip=${header." + Exchange.FILE_NAME_PRODUCED + "} til feilmappe. " + KEY_LOGGING_INFO + ".");
 
-        from("{{skanmotovrig.helse.endpointuri}}/{{skanmotovrig.helse.filomraade.inngaaendemappe}}" +
-                "?{{skanmotovrig.helse.endpointconfig}}" +
+        from("{{skanmothelse.helse.endpointuri}}/{{skanmothelse.helse.filomraade.inngaaendemappe}}" +
+                "?{{skanmothelse.helse.endpointconfig}}" +
                 "&delay=" + TimeUnit.SECONDS.toMillis(60) +
                 "&antExclude=*enc.zip, *enc.ZIP" +
                 "&antInclude=*.zip,*.ZIP" +
@@ -65,7 +63,7 @@ public class PostboksHelseRoute extends RouteBuilder {
                 "&maxMessagesPerPoll=10" +
                 "&move=processed" +
                 "&jailStartingDirectory=false"+
-                "&scheduler=spring&scheduler.cron={{skanmotovrig.helse.schedule}}")
+                "&scheduler=spring&scheduler.cron={{skanmothelse.helse.schedule}}")
                 .routeId("read_zip_from_sftp")
                 .log(LoggingLevel.INFO, log, "Skanmothelse starter behandling av fil=${file:absolute.path}.")
                 .setProperty(PROPERTY_FORSENDELSE_ZIPNAME, simple("${file:name}"))
@@ -74,7 +72,7 @@ public class PostboksHelseRoute extends RouteBuilder {
                 .split(new ZipSplitter()).streaming()
                 .aggregate(simple("${file:name.noext.single}"), new PostboksHelseSkanningAggregator())
                 .completionSize(FORVENTET_ANTALL_PER_FORSENDELSE)
-                .completionTimeout(skanmotovrigProperties.getHelse().getCompletiontimeout().toMillis())
+                .completionTimeout(skanmothelseProperties.getHelse().getCompletiontimeout().toMillis())
                 .setProperty(PROPERTY_FORSENDELSE_FILEBASENAME, simple("${exchangeProperty.CamelAggregatedCorrelationKey}"))
                 .process(new MdcSetterProcessor())
                 .process(exchange -> DokCounter.incrementCounter("antall_innkommende", List.of(DokCounter.DOMAIN, DokCounter.HELSE)))
@@ -101,8 +99,8 @@ public class PostboksHelseRoute extends RouteBuilder {
                 .routeId("avvik")
                 .choice().when(body().isInstanceOf(PostboksHelseEnvelope.class))
                 .setBody(simple("${body.createZip}"))
-                .to("{{skanmotovrig.helse.endpointuri}}/{{skanmotovrig.helse.filomraade.feilmappe}}" +
-                        "?{{skanmotovrig.helse.endpointconfig}}")
+                .to("{{skanmothelse.helse.endpointuri}}/{{skanmothelse.helse.filomraade.feilmappe}}" +
+                        "?{{skanmothelse.helse.endpointconfig}}")
                 .otherwise()
                 .log(LoggingLevel.ERROR, log, "Skanmothelse teknisk feil der " + KEY_LOGGING_INFO + ". ikke ble flyttet til feilområde. Må analyseres.")
                 .end()

@@ -1,7 +1,7 @@
 package no.nav.skanmothelse.helse;
 
 import lombok.extern.slf4j.Slf4j;
-import no.nav.skanmothelse.config.properties.SkanmotovrigProperties;
+import no.nav.skanmothelse.config.properties.SkanmothelseProperties;
 import no.nav.skanmothelse.lagrefildetaljer.OpprettJournalpostConsumer;
 import no.nav.skanmothelse.lagrefildetaljer.OpprettJournalpostService;
 import no.nav.skanmothelse.lagrefildetaljer.STSConsumer;
@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 @Configuration
 @EnableAutoConfiguration
-@EnableConfigurationProperties(SkanmotovrigProperties.class)
+@EnableConfigurationProperties(SkanmothelseProperties.class)
 @Import({OpprettJournalpostConsumer.class, STSConsumer.class, OpprettJournalpostService.class, HelseTestConfig.SshdSftpServerConfig.class,
         HelseTestConfig.CamelTestStartupConfig.class, HelseConfig.class, DokCounter.class})
 public class HelseTestConfig {
@@ -41,7 +41,7 @@ public class HelseTestConfig {
     private static final String sftpPort = String.valueOf(ThreadLocalRandom.current().nextInt(2000, 2999));
 
     static {
-        System.setProperty("skanmotovrig.sftp.port", sftpPort);
+        System.setProperty("skanmothelse.sftp.port", sftpPort);
     }
 
     @Configuration
@@ -82,9 +82,9 @@ public class HelseTestConfig {
 
         @Bean(initMethod = "start", destroyMethod = "stop")
         public SshServer sshServer(final Path sshdPath,
-                final SkanmotovrigProperties skanmotovrigProperties) throws IOException {
+                final SkanmothelseProperties skanmothelseProperties) throws IOException {
             SshServer sshd = SshServer.setUpDefaultServer();
-            sshd.setPort(Integer.parseInt(skanmotovrigProperties.getSftp().getPort()));
+            sshd.setPort(Integer.parseInt(skanmothelseProperties.getSftp().getPort()));
             sshd.setKeyPairProvider(new SimpleGeneratorHostKeyProvider(Path.of("src/test/resources/sftp/itest.ser")));
             sshd.setCommandFactory(new ScpCommandFactory());
             sshd.setSubsystemFactories(List.of(new SftpSubsystemFactory()));

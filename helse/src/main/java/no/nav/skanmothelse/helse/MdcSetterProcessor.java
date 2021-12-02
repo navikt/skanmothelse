@@ -9,9 +9,7 @@ import static no.nav.skanmothelse.helse.PostboksHelseRoute.PROPERTY_FORSENDELSE_
 import static no.nav.skanmothelse.helse.PostboksHelseRoute.PROPERTY_FORSENDELSE_FILEBASENAME;
 import static no.nav.skanmothelse.helse.PostboksHelseRoute.PROPERTY_FORSENDELSE_ZIPNAME;
 
-/**
- * @author Joakim Bjørnstad, Jbit AS
- */
+
 public class MdcSetterProcessor implements Processor {
 
     @Override

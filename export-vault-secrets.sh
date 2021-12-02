@@ -1,13 +1,13 @@
 #!/usr/bin/env sh
 
-if test -f /var/run/secrets/nais.io/srvskanmotovrig/username;
+if test -f /var/run/secrets/nais.io/srvskanmothelse/username;
 then
     echo "Setting SERVICEUSER_USERNAME"
-    export skanmotovrig_SERVICEUSER_USERNAME=$(cat /var/run/secrets/nais.io/srvskanmotovrig/username)
+    export skanmothelse_SERVICEUSER_USERNAME=$(cat /var/run/secrets/nais.io/srvskanmothelse/username)
 fi
 
-if test -f /var/run/secrets/nais.io/srvskanmotovrig/password;
+if test -f /var/run/secrets/nais.io/srvskanmothelse/password;
 then
     echo "Setting SERVICEUSER_PASSWORD"
-    export skanmotovrig_SERVICEUSER_PASSWORD=$(cat /var/run/secrets/nais.io/srvskanmotovrig/password)
+    export skanmothelse_SERVICEUSER_PASSWORD=$(cat /var/run/secrets/nais.io/srvskanmothelse/password)
 fi

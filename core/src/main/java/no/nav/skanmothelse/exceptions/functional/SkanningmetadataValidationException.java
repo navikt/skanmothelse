@@ -2,10 +2,8 @@ package no.nav.skanmothelse.exceptions.functional;
 
 /**
  * Brukes når en skanningmetadata xml ikke validerer.
- *
- * @author Joakim Bjørnstad, Jbit AS
  */
-public class SkanningmetadataValidationException extends AbstractSkanmotovrigFunctionalException {
+public class SkanningmetadataValidationException extends AbstractSkanmothelseFunctionalException {
     public SkanningmetadataValidationException(String message) {
         super(message);
     }

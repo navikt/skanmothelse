@@ -13,9 +13,9 @@ import java.time.Duration;
 @Getter
 @Setter
 @ToString
-@ConfigurationProperties("skanmotovrig")
+@ConfigurationProperties("skanmothelse")
 @Validated
-public class SkanmotovrigProperties {
+public class SkanmothelseProperties {
 
     @NotNull
     private String dokarkivjournalposturl;
@@ -25,7 +25,6 @@ public class SkanmotovrigProperties {
 
     private final ServiceUserProperties serviceuser = new ServiceUserProperties();
     private final FilomraadeProperties filomraade = new FilomraadeProperties();
-    private final Ovrig ovrig = new Ovrig();
     private final Helse helse = new Helse();
     private final SftpProperties sftp = new SftpProperties();
 
@@ -53,25 +52,6 @@ public class SkanmotovrigProperties {
         private String feilmappe;
     }
 
-    @Getter
-    @Setter
-    @Validated
-    public static class Ovrig {
-        @NotEmpty
-        private String endpointuri;
-
-        @NotEmpty
-        private String endpointconfig;
-
-        @NotEmpty
-        private String schedule;
-
-        @NotNull
-        private Duration completiontimeout;
-
-        @NotNull
-        private final FilomraadeProperties filomraade = new FilomraadeProperties();
-    }
 
     @Getter
     @Setter
