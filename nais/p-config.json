@@ -1,13 +1,13 @@
 {
   "NAMESPACE": "teamdokumenthandtering",
-  "SRVSKANMOTOVRIG": "/serviceuser/data/prod/srvskanmotovrig",
-  "VAULT": "kv/prod/fss/skanmotovrig/default",
-  "SFTP_KEYS": "kv/prod/fss/skanmotovrig/keys",
-  "SKANMOTOVRIG_DOKARKIVJOURNALPOSTURL": "https://dokarkiv.intern.nav.no/rest/journalpostapi/v1/journalpost?foersoekFerdigstill=false",
-  "SKANMOTOVRIG_STSURL": "https://security-token-service.nais.adeo.no/rest/v1/sts/token",
-  "SKANMOTOVRIG_OVRIG_SCHEDULE": "0+5/15+*+*+*+*",
-  "SKANMOTOVRIG_HELSE_SCHEDULE": "0+0/15+*+*+*+*",
+  "SRVSKANMOTHELSE": "/serviceuser/data/prod/srvskanmothelse",
+  "VAULT": "kv/prod/fss/skanmothelse/default",
+  "SFTP_KEYS": "kv/prod/fss/skanmothelse/keys",
+  "SKANMOTHELSE_DOKARKIVJOURNALPOSTURL": "https://dokarkiv.intern.nav.no/rest/journalpostapi/v1/journalpost?foersoekFerdigstill=false",
+  "SKANMOTHELSE_STSURL": "https://security-token-service.nais.adeo.no/rest/v1/sts/token",
+  "SKANMOTHELSE_HELSE_SCHEDULE": "0+5/15+*+*+*+*",
+  "SKANMOTHELSE_HELSE_SCHEDULE": "0+0/15+*+*+*+*",
   "INGRESSES": [
-    "https://skanmotovrig.intern.nav.no"
+    "https://skanmothelse.intern.nav.no"
   ]
 }

@@ -3,8 +3,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>skanmotovrig</artifactId>
-        <groupId>no.nav.skanmotovrig</groupId>
+        <artifactId>skanmothelse</artifactId>
+        <groupId>no.nav.skanmothelse</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -13,7 +13,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>no.nav.skanmotovrig</groupId>
+            <groupId>no.nav.skanmothelse</groupId>
             <artifactId>core</artifactId>
         </dependency>
         <dependency>

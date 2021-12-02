@@ -4,8 +4,8 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>no.nav.skanmotovrig</groupId>
-		<artifactId>skanmotovrig</artifactId>
+		<groupId>no.nav.skanmothelse</groupId>
+		<artifactId>skanmothelse</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
@@ -14,16 +14,12 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>no.nav.skanmotovrig</groupId>
+			<groupId>no.nav.skanmothelse</groupId>
 			<artifactId>core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>no.nav.skanmotovrig</groupId>
+			<groupId>no.nav.skanmothelse</groupId>
 			<artifactId>helse</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.skanmotovrig</groupId>
-			<artifactId>ovrig</artifactId>
 		</dependency>
 	</dependencies>
 	
@@ -34,7 +30,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<finalName>app</finalName>
-					<mainClass>no.nav.skanmotovrig.Application</mainClass>
+					<mainClass>no.nav.skanmothelse.Application</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -12,7 +12,7 @@
         <appender-ref ref="CONSOLE"/>
     </root>
 
-    <logger name="no.nav.skanmotovrig" level="INFO" additivity="false">
+    <logger name="no.nav.skanmothelse" level="INFO" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
 
