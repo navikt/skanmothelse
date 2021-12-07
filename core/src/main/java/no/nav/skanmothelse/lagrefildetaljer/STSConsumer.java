@@ -1,5 +1,6 @@
 package no.nav.skanmothelse.lagrefildetaljer;
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.skanmothelse.config.properties.SkanmothelseProperties;
 import no.nav.skanmothelse.exceptions.functional.SkanmothelseFunctionalException;
 import no.nav.skanmothelse.exceptions.technical.SkanmothelseTechnicalException;
@@ -28,6 +29,7 @@ import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
+@Slf4j
 @Component
 public class STSConsumer {
 	private final String urlEncodedBody = "grant_type=client_credentials&scope=openid";
@@ -39,6 +41,16 @@ public class STSConsumer {
 			RestTemplateBuilder restTemplateBuilder,
 			SkanmothelseProperties skanmothelseProperties
 	) {
+
+		if (skanmothelseProperties.getStsurl() == null) {
+			log.error("getStsurl");
+		}
+		if (skanmothelseProperties.getServiceuser().getUsername() == null) {
+			log.error("getServiceuser");
+		}
+		if (skanmothelseProperties.getServiceuser().getPassword() == null) {
+			log.error("getServiceuser");
+		}
 		this.stsUrl = skanmothelseProperties.getStsurl();
 		this.restTemplate = restTemplateBuilder
 				.basicAuthentication(skanmothelseProperties.getServiceuser().getUsername(),
