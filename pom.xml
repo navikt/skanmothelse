@@ -28,10 +28,8 @@
         <camel.version>3.10.0</camel.version>
         <spring-cloud.version>Hoxton.SR11</spring-cloud.version>
         <zip4j.version>2.6.4</zip4j.version>
-        <glassfish.jaxb.version>2.3.3</glassfish.jaxb.version>
         <javax.activation.version>1.1.1</javax.activation.version>
         <javax.inject.version>1</javax.inject.version>
-        <javax.bind.version>2.3.1</javax.bind.version>
         <logstash-logback-encoder.version>6.6</logstash-logback-encoder.version>
         <lombok.version>1.18.22</lombok.version>
         <spring-cloud-contract-wiremock.version>3.0.3</spring-cloud-contract-wiremock.version>
@@ -88,16 +86,6 @@
                 <groupId>javax.activation</groupId>
                 <artifactId>activation</artifactId>
                 <version>${javax.activation.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.xml.bind</groupId>
-                <artifactId>jaxb-api</artifactId>
-                <version>${javax.bind.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.glassfish.jaxb</groupId>
-                <artifactId>jaxb-runtime</artifactId>
-                <version>${glassfish.jaxb.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
