@@ -103,7 +103,7 @@ public class PostboksHelseRouteEncryptedIT extends AbstractIt {
 		copyFileFromClasspathToInngaaende("BHELSE.20200529-3.enc.zip");
 		setUpHappyStubs();
 
-		await().atMost(15, SECONDS).untilAsserted(() -> {
+		await().atMost(20, SECONDS).untilAsserted(() -> {
 			try {
 				assertThat(Files.list(sshdPath.resolve(FEILMAPPE).resolve(BATCHNAME_2))
 						.collect(Collectors.toList())).hasSize(3);
