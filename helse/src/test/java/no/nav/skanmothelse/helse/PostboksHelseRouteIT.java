@@ -4,9 +4,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -27,10 +27,11 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class PostboksHelseRouteIT extends AbstractIt {
 	private static final String INNGAAENDE = "inngaaende";
 	private static final String FEILMAPPE = "feilmappe";
+
 	private static final String BATCHNAME_1 = "BHELSE-20200529-1";
 	private static final String BATCHNAME_2 = "BHELSE.20200529-2";
 
-	@Inject
+	@Autowired
 	private Path sshdPath;
 
 	@BeforeEach
@@ -65,7 +66,6 @@ public class PostboksHelseRouteIT extends AbstractIt {
 		// FEIL - BHELSE-20200529-1-5 pdf, ocr (mangler xml)
 
 		copyFileFromClasspathToInngaaende("BHELSE-20200529-1.zip");
-		setUpHappyStubs();
 
 		await().atMost(15, SECONDS).untilAsserted(() -> {
 			try {
@@ -97,7 +97,6 @@ public class PostboksHelseRouteIT extends AbstractIt {
 		// FEIL - BHELSE.20200529-2-5 pdf, ocr (mangler xml)
 
 		copyFileFromClasspathToInngaaende("BHELSE.20200529-2.zip");
-		setUpHappyStubs();
 
 		await().atMost(15, SECONDS).untilAsserted(() -> {
 			try {
@@ -132,7 +131,6 @@ public class PostboksHelseRouteIT extends AbstractIt {
 
 		String zipfilenamenoext = "BHELSE-XML-ORDERED-FIRST-1";
 		copyFileFromClasspathToInngaaende(zipfilenamenoext + ".zip");
-		setUpHappyStubs();
 
 		await().atMost(15, SECONDS).untilAsserted(() -> {
 			try {

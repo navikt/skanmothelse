@@ -8,9 +8,9 @@ import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.dataformat.zipfile.ZipSplitter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -27,7 +27,7 @@ public class PostboksHelseRoute extends RouteBuilder {
     private final SkanmothelseProperties skanmothelseProperties;
     private final PostboksHelseService postboksHelseService;
 
-    @Inject
+    @Autowired
     public PostboksHelseRoute(PostboksHelseService postboksHelseService, SkanmothelseProperties skanmothelseProperties) {
         this.postboksHelseService = postboksHelseService;
         this.skanmothelseProperties = skanmothelseProperties;

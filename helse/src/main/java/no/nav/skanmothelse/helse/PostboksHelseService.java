@@ -6,9 +6,8 @@ import no.nav.skanmothelse.lagrefildetaljer.data.OpprettJournalpostRequest;
 import no.nav.skanmothelse.lagrefildetaljer.data.OpprettJournalpostResponse;
 import org.apache.camel.Body;
 import org.apache.camel.Handler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import javax.inject.Inject;
 
 
 @Slf4j
@@ -17,7 +16,7 @@ public class PostboksHelseService {
     private final OpprettJournalpostPostboksHelseRequestMapper mapper;
     private final OpprettJournalpostService opprettJournalpostService;
 
-    @Inject
+    @Autowired
     public PostboksHelseService(OpprettJournalpostPostboksHelseRequestMapper mapper,
                                 OpprettJournalpostService opprettJournalpostService) {
         this.mapper = mapper;

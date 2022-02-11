@@ -30,7 +30,6 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<finalName>app</finalName>
-					<mainClass>no.nav.skanmothelse.Application</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>

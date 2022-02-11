@@ -17,11 +17,11 @@ import no.nav.skanmothelse.metrics.DokCounter;
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.builder.SimpleBuilder;
+import org.apache.camel.builder.ValueBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -39,7 +39,7 @@ public class PostboksHelseRouteEncrypted extends RouteBuilder {
     private final PostboksHelseService postboksHelseService;
     private final String passphrase;
 
-    @Inject
+    @Autowired
     public PostboksHelseRouteEncrypted(@Value("${skanmothelse.secret.passphrase}") String passphrase,
                                        PostboksHelseService postboksHelseService, SkanmothelseProperties skanmothelseProperties) {
         this.postboksHelseService = postboksHelseService;
@@ -131,7 +131,7 @@ public class PostboksHelseRouteEncrypted extends RouteBuilder {
                 .process(new MdcRemoverProcessor());
     }
 
-    private String cleanDotEncExtension(SimpleBuilder value1, Exchange exchange) {
+    private String cleanDotEncExtension(ValueBuilder value1, Exchange exchange) {
         String stringRepresentation = value1.evaluate(exchange, String.class);
         if (stringRepresentation.contains(".enc")) {
             return stringRepresentation.replace(".enc", "");

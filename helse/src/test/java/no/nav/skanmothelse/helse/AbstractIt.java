@@ -1,8 +1,8 @@
 package no.nav.skanmothelse.helse;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
-import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
@@ -39,43 +40,40 @@ public class AbstractIt {
 	private static final String STS_URL = "/rest/v1/sts/token";
 
 	@BeforeEach
-	void settUpMocks() {
+	void setUpMocks() {
 		stubFor(post(urlMatching(STS_URL))
 				.willReturn(aResponse()
 						.withHeader("Content-Type", "application/json")
 						.withBodyFile("sts/token.json"))
 		);
-	}
 
-	@BeforeEach
-	void resetMocks() {
-		WireMock.reset();
-		WireMock.resetAllRequests();
-		WireMock.removeAllMappings();
-	}
-
-	void setUpHappyStubs() {
 		stubFor(post(urlMatching(URL_DOKARKIV_JOURNALPOST_GEN))
 				.willReturn(aResponse().withStatus(OK.value())
 						.withHeader(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON_VALUE)
 						.withBodyFile("journalpostapi/success.json")));
 	}
 
-	public void StubOpprettJournalpostResponseConflictWithValidResponse() {
+	@AfterEach
+	void resetMocks() {
+		WireMock.reset();
+		WireMock.resetAllRequests();
+		WireMock.removeAllMappings();
+	}
+
+	public void stubOpprettJournalpostResponseConflictWithValidResponse() throws IOException {
 		stubFor(post("/rest/journalpostapi/v1/journalpost?foersoekFerdigstill=false").willReturn(aResponse()
 				.withStatus(CONFLICT.value())
 				.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
 				.withBody(classpathToString("__files/journalpostapi/allerede_opprett_journalpost_response_HAPPY.json"))));
 	}
 
-	protected void StubOpprettJournalpostResponseConflictWithInvalidResponse() {
+	protected void stubOpprettJournalpostResponseConflictWithInvalidResponse() {
 		stubFor(post("/rest/journalpostapi/v1/journalpost?foersoekFerdigstill=false").willReturn(aResponse()
 				.withStatus(CONFLICT.value())
 				.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
 	}
 
-	@SneakyThrows
-	private static String classpathToString(String classpathResource) {
+	private static String classpathToString(String classpathResource) throws IOException {
 		InputStream inputStream = new ClassPathResource(classpathResource).getInputStream();
 		return IOUtils.toString(inputStream, UTF_8);
 	}

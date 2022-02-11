@@ -5,9 +5,9 @@ import org.apache.commons.io.FilenameUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -33,7 +33,7 @@ public class PostboksHelseRouteEncryptedIT extends AbstractIt {
 	private static final String ZIP_FILENAME_NO_EXTENSION_BAD_ENCRYPTION = "BHELSE-20200529-BAD-ENCRYPTION-3";
 	private static final String ZIP_FILE_NAME_NOT_ENCRYPTED_ENC = "BHELSE-XML-ORDERED-UKRYPTERED-4";
 
-	@Inject
+	@Autowired
 	private Path sshdPath;
 
 	@BeforeEach
@@ -69,7 +69,6 @@ public class PostboksHelseRouteEncryptedIT extends AbstractIt {
 		// FEIL - BHELSE-20200529-3-5 pdf, ocr (mangler xml)
 
 		copyFileFromClasspathToInngaaende("BHELSE-20200529-3.enc.zip");
-		setUpHappyStubs();
 
 		await().atMost(15, SECONDS).untilAsserted(() -> {
 			try {
@@ -79,7 +78,6 @@ public class PostboksHelseRouteEncryptedIT extends AbstractIt {
 				fail();
 			}
 		});
-
 
 		final List<String> feilmappeContents = Files.list(sshdPath.resolve(FEILMAPPE).resolve(BATCHNAME_1))
 				.map(p -> FilenameUtils.getName(p.toAbsolutePath().toString()))
@@ -101,7 +99,6 @@ public class PostboksHelseRouteEncryptedIT extends AbstractIt {
 		// FEIL - BHELSE.20200529-3-5 pdf, ocr (mangler xml)
 
 		copyFileFromClasspathToInngaaende("BHELSE.20200529-3.enc.zip");
-		setUpHappyStubs();
 
 		await().atMost(15, SECONDS).untilAsserted(() -> {
 			try {
