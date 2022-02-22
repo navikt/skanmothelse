@@ -35,7 +35,7 @@ public class ZipSplitterEncrypted extends ZipSplitter {
     private final String passphrase;
 
     @Autowired
-    public ZipSplitterEncrypted(@Value("${skanmothelse.secret.passphrase}") String passphrase) {
+    public ZipSplitterEncrypted(@Value("${passphrase}") String passphrase) {
         this.passphrase = passphrase;
     }
 

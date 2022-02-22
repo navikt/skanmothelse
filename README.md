@@ -1,4 +1,4 @@
-#SKANMOTHELSE
+# Skanmothelse
 Applikasjonen skal behandle følgende forsendelsestyper:
 
 * dokumenter med førsteside produsert fra Arena

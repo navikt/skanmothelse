@@ -40,7 +40,7 @@ public class PostboksHelseRouteEncrypted extends RouteBuilder {
     private final String passphrase;
 
     @Autowired
-    public PostboksHelseRouteEncrypted(@Value("${skanmothelse.secret.passphrase}") String passphrase,
+    public PostboksHelseRouteEncrypted(@Value("${passphrase}") String passphrase,
                                        PostboksHelseService postboksHelseService, SkanmothelseProperties skanmothelseProperties) {
         this.postboksHelseService = postboksHelseService;
         this.skanmothelseProperties = skanmothelseProperties;
