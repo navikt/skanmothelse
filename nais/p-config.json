@@ -1,7 +1,5 @@
 {
-  "NAMESPACE": "teamdokumenthandtering",
   "SRVSKANMOTHELSE": "/serviceuser/data/prod/srvskanmothelse",
-  "VAULT": "kv/prod/fss/skanmothelse/default",
   "SFTP_KEYS": "kv/prod/fss/skanmothelse/keys",
   "SKANMOTHELSE_DOKARKIVJOURNALPOSTURL": "https://dokarkiv.intern.nav.no/rest/journalpostapi/v1/journalpost?foersoekFerdigstill=false",
   "SKANMOTHELSE_STSURL": "https://security-token-service.nais.adeo.no/rest/v1/sts/token",

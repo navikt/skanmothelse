@@ -2,7 +2,7 @@ kind: Application
 apiVersion: nais.io/v1alpha1
 metadata:
   name: skanmothelse
-  namespace: {{ NAMESPACE }}
+  namespace: teamdokumenthandtering
   labels:
     team: teamdokumenthandtering
 spec:
@@ -52,7 +52,5 @@ spec:
     paths:
       - kvPath: {{ SRVSKANMOTHELSE }}
         mountPath: /var/run/secrets/nais.io/srvskanmothelse
-      - kvPath: {{ VAULT }}
-        mountPath: /var/run/secrets/nais.io/vault
       - kvPath: {{ SFTP_KEYS }}
         mountPath: /var/run/secrets/nais.io/keys
