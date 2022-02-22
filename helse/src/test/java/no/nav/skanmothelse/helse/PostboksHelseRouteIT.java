@@ -36,6 +36,7 @@ public class PostboksHelseRouteIT extends AbstractIt {
 
 	@BeforeEach
 	void beforeEach() {
+		super.setUpStubs();
 		final Path inngaaende = sshdPath.resolve(INNGAAENDE);
 		final Path processed = inngaaende.resolve("processed");
 		final Path feilmappe = sshdPath.resolve(FEILMAPPE);
@@ -75,7 +76,6 @@ public class PostboksHelseRouteIT extends AbstractIt {
 				fail();
 			}
 		});
-
 
 		final List<String> feilmappeContents = Files.list(sshdPath.resolve(FEILMAPPE).resolve(BATCHNAME_1))
 				.map(p -> FilenameUtils.getName(p.toAbsolutePath().toString()))

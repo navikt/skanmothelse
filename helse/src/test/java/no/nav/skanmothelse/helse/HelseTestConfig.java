@@ -38,12 +38,6 @@ import static java.util.Collections.singletonList;
         HelseTestConfig.CamelTestStartupConfig.class, HelseConfig.class, DokCounter.class})
 public class HelseTestConfig {
 
-//    private static final String sftpPort = String.valueOf(ThreadLocalRandom.current().nextInt(2000, 2999));
-//
-//    static {
-//        System.setProperty("skanmothelse.sftp.port", sftpPort);
-//    }
-
     @Configuration
     static class CamelTestStartupConfig {
 

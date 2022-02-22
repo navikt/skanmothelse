@@ -1,25 +1,16 @@
 package no.nav.skanmothelse.helse;
 
-import com.github.tomakehurst.wiremock.client.WireMock;
-import org.apache.commons.io.IOUtils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.CONFLICT;
@@ -39,42 +30,32 @@ public class AbstractIt {
 	static final String URL_DOKARKIV_JOURNALPOST_GEN = "/rest/journalpostapi/v1/journalpost\\?foersoekFerdigstill=false";
 	private static final String STS_URL = "/rest/v1/sts/token";
 
-	@BeforeEach
-	void setUpMocks() {
-		stubFor(post(urlMatching(STS_URL))
-				.willReturn(aResponse()
-						.withHeader("Content-Type", "application/json")
-						.withBodyFile("sts/token.json"))
+	void setUpStubs() {
+		stubFor(post(urlMatching(STS_URL)).willReturn(aResponse()
+				.withHeader("Content-Type", "application/json")
+				.withHeader("Connection", "close")
+				.withBodyFile("sts/token.json"))
 		);
 
-		stubFor(post(urlMatching(URL_DOKARKIV_JOURNALPOST_GEN))
-				.willReturn(aResponse().withStatus(OK.value())
-						.withHeader(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON_VALUE)
-						.withBodyFile("journalpostapi/success.json")));
+		stubFor(post(urlMatching(URL_DOKARKIV_JOURNALPOST_GEN)).willReturn(aResponse()
+				.withStatus(OK.value())
+				.withHeader(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON_VALUE)
+				.withHeader("Connection", "close")
+				.withBodyFile("journalpostapi/success.json")));
 	}
 
-	@AfterEach
-	void resetMocks() {
-		WireMock.reset();
-		WireMock.resetAllRequests();
-		WireMock.removeAllMappings();
-	}
-
-	public void stubOpprettJournalpostResponseConflictWithValidResponse() throws IOException {
+	public void stubOpprettJournalpostResponseConflictWithValidResponse() {
 		stubFor(post("/rest/journalpostapi/v1/journalpost?foersoekFerdigstill=false").willReturn(aResponse()
 				.withStatus(CONFLICT.value())
 				.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-				.withBody(classpathToString("__files/journalpostapi/allerede_opprett_journalpost_response_HAPPY.json"))));
+				.withHeader("Connection", "close")
+				.withBodyFile("journalpostapi/allerede_opprett_journalpost_response_HAPPY.json"))
+		);
 	}
 
 	protected void stubOpprettJournalpostResponseConflictWithInvalidResponse() {
 		stubFor(post("/rest/journalpostapi/v1/journalpost?foersoekFerdigstill=false").willReturn(aResponse()
 				.withStatus(CONFLICT.value())
 				.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
-	}
-
-	private static String classpathToString(String classpathResource) throws IOException {
-		InputStream inputStream = new ClassPathResource(classpathResource).getInputStream();
-		return IOUtils.toString(inputStream, UTF_8);
 	}
 }

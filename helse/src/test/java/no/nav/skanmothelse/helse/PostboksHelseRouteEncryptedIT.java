@@ -3,7 +3,6 @@ package no.nav.skanmothelse.helse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -38,6 +37,7 @@ public class PostboksHelseRouteEncryptedIT extends AbstractIt {
 
 	@BeforeEach
 	void beforeEach() {
+		super.setUpStubs();
 		final Path inngaaende = sshdPath.resolve(INNGAAENDE);
 		final Path processed = inngaaende.resolve("processed");
 		final Path feilmappe = sshdPath.resolve(FEILMAPPE);
@@ -59,7 +59,6 @@ public class PostboksHelseRouteEncryptedIT extends AbstractIt {
 	}
 
 	@Test
-	@Disabled
 	public void shouldBehandlePostboksHelseEncrptedZip() throws IOException {
 		// BHELSE-20200529-3.enc.zip
 		// OK   - BHELSE-20200529-3-1 xml, pdf
