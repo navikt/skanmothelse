@@ -37,14 +37,14 @@ public class PostboksHelseRouteEncrypted extends RouteBuilder {
 
 	private final SkanmothelseProperties skanmothelseProperties;
 	private final PostboksHelseService postboksHelseService;
-	private final String passphrase;
+	private final String aesPassphrase;
 
 	@Autowired
-	public PostboksHelseRouteEncrypted(@Value("${passphrase}") String passphrase,
+	public PostboksHelseRouteEncrypted(@Value("${aes.passphrase}") String aesPassphrase,
 									   PostboksHelseService postboksHelseService, SkanmothelseProperties skanmothelseProperties) {
 		this.postboksHelseService = postboksHelseService;
 		this.skanmothelseProperties = skanmothelseProperties;
-		this.passphrase = passphrase;
+		this.aesPassphrase = aesPassphrase;
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class PostboksHelseRouteEncrypted extends RouteBuilder {
                 .setProperty(PROPERTY_FORSENDELSE_ZIPNAME, simple("${file:name}"))
                 .process(exchange -> exchange.setProperty(PROPERTY_FORSENDELSE_BATCHNAVN, cleanDotEncExtension(simple("${file:name.noext.single}"),exchange)))
                 .process(new MdcSetterProcessor())
-                .split(new ZipSplitterEncrypted(passphrase)).streaming()
+                .split(new ZipSplitterEncrypted(aesPassphrase)).streaming()
                     .aggregate(simple("${file:name.noext.single}"), new PostboksHelseSkanningAggregator())
                         .completionSize(FORVENTET_ANTALL_PER_FORSENDELSE)
                         .completionTimeout(skanmothelseProperties.getHelse().getCompletiontimeout().toMillis())
