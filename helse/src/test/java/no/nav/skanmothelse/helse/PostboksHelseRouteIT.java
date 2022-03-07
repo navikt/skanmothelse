@@ -28,9 +28,6 @@ public class PostboksHelseRouteIT extends AbstractIt {
 	private static final String INNGAAENDE = "inngaaende";
 	private static final String FEILMAPPE = "feilmappe";
 
-	private static final String BATCHNAME_1 = "BHELSE-20200529-1";
-	private static final String BATCHNAME_2 = "BHELSE.20200529-2";
-
 	@Autowired
 	private Path sshdPath;
 
@@ -66,7 +63,8 @@ public class PostboksHelseRouteIT extends AbstractIt {
 		// FEIL - BHELSE-20200529-1-4 xml, ocr (mangler pdf)
 		// FEIL - BHELSE-20200529-1-5 pdf, ocr (mangler xml)
 
-		copyFileFromClasspathToInngaaende("BHELSE-20200529-1.zip");
+		final String BATCHNAME_1 = "BHELSE-20200529-1";
+		copyFileFromClasspathToInngaaende(BATCHNAME_1 + ".zip");
 
 		await().atMost(15, SECONDS).untilAsserted(() -> {
 			try {
@@ -96,7 +94,8 @@ public class PostboksHelseRouteIT extends AbstractIt {
 		// FEIL - BHELSE.20200529-2-4 xml, ocr (mangler pdf)
 		// FEIL - BHELSE.20200529-2-5 pdf, ocr (mangler xml)
 
-		copyFileFromClasspathToInngaaende("BHELSE.20200529-2.zip");
+		final String BATCHNAME_2 = "BHELSE.20200529-2";
+		copyFileFromClasspathToInngaaende(BATCHNAME_2 + ".zip");
 
 		await().atMost(15, SECONDS).untilAsserted(() -> {
 			try {

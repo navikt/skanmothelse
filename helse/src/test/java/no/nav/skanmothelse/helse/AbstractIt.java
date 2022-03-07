@@ -20,8 +20,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(
 		classes = HelseTestConfig.class,
-		webEnvironment = RANDOM_PORT,
-		properties = "spring.cloud.vault.token=123456"
+		webEnvironment = RANDOM_PORT
 )
 @AutoConfigureWireMock(port = 0)
 @ActiveProfiles("itest")
@@ -41,7 +40,8 @@ public class AbstractIt {
 				.withStatus(OK.value())
 				.withHeader(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON_VALUE)
 				.withHeader("Connection", "close")
-				.withBodyFile("journalpostapi/success.json")));
+				.withBodyFile("journalpostapi/success.json"))
+		);
 	}
 
 	public void stubOpprettJournalpostResponseConflictWithValidResponse() {
@@ -56,6 +56,8 @@ public class AbstractIt {
 	protected void stubOpprettJournalpostResponseConflictWithInvalidResponse() {
 		stubFor(post("/rest/journalpostapi/v1/journalpost?foersoekFerdigstill=false").willReturn(aResponse()
 				.withStatus(CONFLICT.value())
-				.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)));
+				.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+				.withHeader("Connection", "close"))
+		);
 	}
 }

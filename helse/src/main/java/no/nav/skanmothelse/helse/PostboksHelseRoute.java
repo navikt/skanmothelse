@@ -18,23 +18,25 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 public class PostboksHelseRoute extends RouteBuilder {
-    public static final String PROPERTY_FORSENDELSE_ZIPNAME = "ForsendelseZipname";
-    public static final String PROPERTY_FORSENDELSE_BATCHNAVN = "ForsendelseBatchNavn";
-    public static final String PROPERTY_FORSENDELSE_FILEBASENAME = "ForsendelseFileBasename";
-    public static final String KEY_LOGGING_INFO = "fil=${exchangeProperty." + PROPERTY_FORSENDELSE_FILEBASENAME + "}, batch=${exchangeProperty." + PROPERTY_FORSENDELSE_BATCHNAVN + "}";
-    static final int FORVENTET_ANTALL_PER_FORSENDELSE = 3;
+	public static final String PROPERTY_FORSENDELSE_ZIPNAME = "ForsendelseZipname";
+	public static final String PROPERTY_FORSENDELSE_BATCHNAVN = "ForsendelseBatchNavn";
+	public static final String PROPERTY_FORSENDELSE_FILEBASENAME = "ForsendelseFileBasename";
+	public static final String KEY_LOGGING_INFO = "fil=${exchangeProperty." + PROPERTY_FORSENDELSE_FILEBASENAME + "}, batch=${exchangeProperty." + PROPERTY_FORSENDELSE_BATCHNAVN + "}";
+	static final int FORVENTET_ANTALL_PER_FORSENDELSE = 3;
 
-    private final SkanmothelseProperties skanmothelseProperties;
-    private final PostboksHelseService postboksHelseService;
+	private final SkanmothelseProperties skanmothelseProperties;
+	private final PostboksHelseService postboksHelseService;
 
-    @Autowired
-    public PostboksHelseRoute(PostboksHelseService postboksHelseService, SkanmothelseProperties skanmothelseProperties) {
-        this.postboksHelseService = postboksHelseService;
-        this.skanmothelseProperties = skanmothelseProperties;
-    }
+	@Autowired
+	public PostboksHelseRoute(PostboksHelseService postboksHelseService, SkanmothelseProperties skanmothelseProperties) {
+		this.postboksHelseService = postboksHelseService;
+		this.skanmothelseProperties = skanmothelseProperties;
+	}
 
-    @Override
-    public void configure() throws Exception {
+	@Override
+	public void configure() {
+
+		// @formatter:off
         onException(Exception.class)
                 .handled(true)
                 .process(new MdcSetterProcessor())
@@ -58,6 +60,7 @@ public class PostboksHelseRoute extends RouteBuilder {
                 "?{{skanmothelse.helse.endpointconfig}}" +
                 "&delay=" + TimeUnit.SECONDS.toMillis(60) +
                 "&antExclude=*enc.zip, *enc.ZIP" +
+                "&antExclude=*zip.pgp, *ZIP.pgp" +
                 "&antInclude=*.zip,*.ZIP" +
                 "&initialDelay=1000" +
                 "&maxMessagesPerPoll=10" +
@@ -70,18 +73,18 @@ public class PostboksHelseRoute extends RouteBuilder {
                 .setProperty(PROPERTY_FORSENDELSE_BATCHNAVN, simple("${file:name.noext.single}"))
                 .process(new MdcSetterProcessor())
                 .split(new ZipSplitter()).streaming()
-                .aggregate(simple("${file:name.noext.single}"), new PostboksHelseSkanningAggregator())
-                .completionSize(FORVENTET_ANTALL_PER_FORSENDELSE)
-                .completionTimeout(skanmothelseProperties.getHelse().getCompletiontimeout().toMillis())
-                .setProperty(PROPERTY_FORSENDELSE_FILEBASENAME, simple("${exchangeProperty.CamelAggregatedCorrelationKey}"))
-                .process(new MdcSetterProcessor())
-                .process(exchange -> DokCounter.incrementCounter("antall_innkommende", List.of(DokCounter.DOMAIN, DokCounter.HELSE)))
-                .process(exchange -> exchange.getIn().getBody(PostboksHelseEnvelope.class).validate())
-                .bean(new SkanningmetadataUnmarshaller())
-                .bean(new SkanningmetadataCounter())
-                .setProperty(PROPERTY_FORSENDELSE_BATCHNAVN, simple("${body.skanningmetadata.journalpost.batchnavn}"))
-                .to("direct:process_helse")
-                .end() // aggregate
+					.aggregate(simple("${file:name.noext.single}"), new PostboksHelseSkanningAggregator())
+						.completionSize(FORVENTET_ANTALL_PER_FORSENDELSE)
+						.completionTimeout(skanmothelseProperties.getHelse().getCompletiontimeout().toMillis())
+						.setProperty(PROPERTY_FORSENDELSE_FILEBASENAME, simple("${exchangeProperty.CamelAggregatedCorrelationKey}"))
+						.process(new MdcSetterProcessor())
+						.process(exchange -> DokCounter.incrementCounter("antall_innkommende", List.of(DokCounter.DOMAIN, DokCounter.HELSE)))
+						.process(exchange -> exchange.getIn().getBody(PostboksHelseEnvelope.class).validate())
+						.bean(new SkanningmetadataUnmarshaller())
+						.bean(new SkanningmetadataCounter())
+						.setProperty(PROPERTY_FORSENDELSE_BATCHNAVN, simple("${body.skanningmetadata.journalpost.batchnavn}"))
+						.to("direct:process_helse")
+					.end() // aggregate
                 .end() // split
                 .process(new MdcRemoverProcessor())
                 .log(LoggingLevel.INFO, log, "Skanmothelse behandlet ferdig fil=${file:absolute.path}.");
@@ -105,5 +108,7 @@ public class PostboksHelseRoute extends RouteBuilder {
                 .log(LoggingLevel.ERROR, log, "Skanmothelse teknisk feil der " + KEY_LOGGING_INFO + ". ikke ble flyttet til feilområde. Må analyseres.")
                 .end()
                 .process(new MdcRemoverProcessor());
-    }
+
+        // @formatter:on
+	}
 }

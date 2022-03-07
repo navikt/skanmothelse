@@ -25,7 +25,7 @@ class OpprettJournalpostConsumerTest extends AbstractIt {
 	OpprettJournalpostConsumer opprettJournalpostConsumer;
 
 	@Test
-	public void shouldGetJournalpostWhenResponseIs () throws IOException {
+	public void shouldGetJournalpostWhenResponseIs () {
 		stubOpprettJournalpostResponseConflictWithValidResponse();
 		OpprettJournalpostRequest request = OpprettJournalpostRequest.builder().build();
 

@@ -27,10 +27,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class PostboksHelseRouteEncryptedIT extends AbstractIt {
 	private static final String INNGAAENDE = "inngaaende";
 	private static final String FEILMAPPE = "feilmappe";
-	private static final String BATCHNAME_1 = "BHELSE-20200529-3";
-	private static final String BATCHNAME_2 = "BHELSE.20200529-3";
-	private static final String ZIP_FILENAME_NO_EXTENSION_BAD_ENCRYPTION = "BHELSE-20200529-BAD-ENCRYPTION-3";
-	private static final String ZIP_FILE_NAME_NOT_ENCRYPTED_ENC = "BHELSE-XML-ORDERED-UKRYPTERED-4";
 
 	@Autowired
 	private Path sshdPath;
@@ -59,7 +55,7 @@ public class PostboksHelseRouteEncryptedIT extends AbstractIt {
 	}
 
 	@Test
-	public void shouldBehandlePostboksHelseEncrptedZip() throws IOException {
+	public void shouldBehandlePostboksHelseEncryptedZip() throws IOException {
 		// BHELSE-20200529-3.enc.zip
 		// OK   - BHELSE-20200529-3-1 xml, pdf
 		// OK   - BHELSE-20200529-3-2 xml, pdf, ocr
@@ -67,7 +63,8 @@ public class PostboksHelseRouteEncryptedIT extends AbstractIt {
 		// FEIL - BHELSE-20200529-3-4 xml, ocr (mangler pdf)
 		// FEIL - BHELSE-20200529-3-5 pdf, ocr (mangler xml)
 
-		copyFileFromClasspathToInngaaende("BHELSE-20200529-3.enc.zip");
+		final String BATCHNAME_1 = "BHELSE-20200529-3";
+		copyFileFromClasspathToInngaaende(BATCHNAME_1 + ".enc.zip");
 
 		await().atMost(15, SECONDS).untilAsserted(() -> {
 			try {
@@ -97,7 +94,8 @@ public class PostboksHelseRouteEncryptedIT extends AbstractIt {
 		// FEIL - BHELSE.20200529-3-4 xml, ocr (mangler pdf)
 		// FEIL - BHELSE.20200529-3-5 pdf, ocr (mangler xml)
 
-		copyFileFromClasspathToInngaaende("BHELSE.20200529-3.enc.zip");
+		final String BATCHNAME_2 = "BHELSE.20200529-3";
+		copyFileFromClasspathToInngaaende(BATCHNAME_2 + ".enc.zip");
 
 		await().atMost(15, SECONDS).untilAsserted(() -> {
 			try {
@@ -124,6 +122,7 @@ public class PostboksHelseRouteEncryptedIT extends AbstractIt {
 		//ZipException: En .enc-file kom inn men filene er ukrypterte
 		//should be sent to feilmappe
 
+		final String ZIP_FILE_NAME_NOT_ENCRYPTED_ENC = "BHELSE-XML-ORDERED-UKRYPTERED-4";
 		copyFileFromClasspathToInngaaende(ZIP_FILE_NAME_NOT_ENCRYPTED_ENC + ".enc.zip");
 
 		await().atMost(15, SECONDS).untilAsserted(() -> {
@@ -143,6 +142,7 @@ public class PostboksHelseRouteEncryptedIT extends AbstractIt {
 		//ZipException: Filene er ikke kryptert med AES men en annen krypteringsmetode
 		//should be sent to feilmappe
 
+		final String ZIP_FILENAME_NO_EXTENSION_BAD_ENCRYPTION = "BHELSE-20200529-BAD-ENCRYPTION-3";
 		copyFileFromClasspathToInngaaende(ZIP_FILENAME_NO_EXTENSION_BAD_ENCRYPTION + ".enc.zip");
 
 		await().atMost(15, SECONDS).untilAsserted(() -> {
