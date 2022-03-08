@@ -24,11 +24,11 @@ import org.springframework.context.annotation.Import;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static java.nio.file.Path.of;
+import static java.util.Collections.singletonList;
 
 @Slf4j
 @Configuration
@@ -37,12 +37,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Import({OpprettJournalpostConsumer.class, STSConsumer.class, OpprettJournalpostService.class, HelseTestConfig.SshdSftpServerConfig.class,
         HelseTestConfig.CamelTestStartupConfig.class, HelseConfig.class, DokCounter.class})
 public class HelseTestConfig {
-
-    private static final String sftpPort = String.valueOf(ThreadLocalRandom.current().nextInt(2000, 2999));
-
-    static {
-        System.setProperty("skanmothelse.sftp.port", sftpPort);
-    }
 
     @Configuration
     static class CamelTestStartupConfig {
@@ -81,15 +75,18 @@ public class HelseTestConfig {
         }
 
         @Bean(initMethod = "start", destroyMethod = "stop")
-        public SshServer sshServer(final Path sshdPath,
-                final SkanmothelseProperties skanmothelseProperties) throws IOException {
+        public SshServer sshServer(final Path sshdPath) {
+
+            String sftpPort = String.valueOf(ThreadLocalRandom.current().nextInt(2000, 2999));
+            System.setProperty("skanmothelse.sftp.port", sftpPort);
+
             SshServer sshd = SshServer.setUpDefaultServer();
-            sshd.setPort(Integer.parseInt(skanmothelseProperties.getSftp().getPort()));
-            sshd.setKeyPairProvider(new SimpleGeneratorHostKeyProvider(Path.of("src/test/resources/sftp/itest.ser")));
+            sshd.setPort(Integer.parseInt(sftpPort));
+            sshd.setKeyPairProvider(new SimpleGeneratorHostKeyProvider(of("src/test/resources/sftp/itest.ser")));
             sshd.setCommandFactory(new ScpCommandFactory());
-            sshd.setSubsystemFactories(List.of(new SftpSubsystemFactory()));
-            sshd.setPublickeyAuthenticator(new AuthorizedKeysAuthenticator(Paths.get("src/test/resources/sftp/itest_valid.pub")));
-            sshd.setUserAuthFactories(Collections.singletonList(new UserAuthNoneFactory()));
+            sshd.setSubsystemFactories(singletonList(new SftpSubsystemFactory()));
+            sshd.setPublickeyAuthenticator(new AuthorizedKeysAuthenticator(of("src/test/resources/sftp/itest_valid.pub")));
+            sshd.setUserAuthFactories(singletonList(new UserAuthNoneFactory()));
             sshd.setFileSystemFactory(new VirtualFileSystemFactory(sshdPath));
             return sshd;
         }

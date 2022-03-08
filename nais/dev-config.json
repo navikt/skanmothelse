@@ -1,11 +1,11 @@
 {
-  "NAMESPACE": "teamdokumenthandtering",
   "SRVSKANMOTHELSE": "/serviceuser/data/dev/srvskanmothelse",
-  "VAULT": "kv/preprod/fss/skanmothelse/teamdokumenthandtering",
   "SFTP_KEYS": "kv/preprod/fss/skanmothelse/keys",
   "SKANMOTHELSE_DOKARKIVJOURNALPOSTURL": "https://dokarkiv.dev.intern.nav.no/rest/journalpostapi/v1/journalpost?foersoekFerdigstill=false",
   "SKANMOTHELSE_STSURL": "https://security-token-service.nais.preprod.local/rest/v1/sts/token",
   "SKANMOTHELSE_HELSE_SCHEDULE": "0+*/5+*+*+*+*",
+  "SKANMOTHELSE_VAULT_BACKEND": "kv/preprod/fss",
+  "SKANMOTHELSE_VAULT_KUBERNETESPATH": "kubernetes/preprod/fss",
   "INGRESSES": [
     "https://skanmothelse.dev.intern.nav.no"
   ]

@@ -1,6 +1,5 @@
 package no.nav.skanmothelse.lagrefildetaljer;
 
-import no.nav.skanmothelse.config.properties.SkanmothelseProperties;
 import no.nav.skanmothelse.exceptions.functional.SkanmothelseFunctionalException;
 import no.nav.skanmothelse.helse.AbstractIt;
 import no.nav.skanmothelse.lagrefildetaljer.data.OpprettJournalpostRequest;
@@ -8,6 +7,8 @@ import no.nav.skanmothelse.lagrefildetaljer.data.OpprettJournalpostResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.EnableRetry;
+
+import java.io.IOException;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.exactly;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
@@ -23,13 +24,9 @@ class OpprettJournalpostConsumerTest extends AbstractIt {
 	@Autowired
 	OpprettJournalpostConsumer opprettJournalpostConsumer;
 
-	@Autowired
-	private SkanmothelseProperties properties;
-
-
 	@Test
 	public void shouldGetJournalpostWhenResponseIs () {
-		StubOpprettJournalpostResponseConflictWithValidResponse();
+		stubOpprettJournalpostResponseConflictWithValidResponse();
 		OpprettJournalpostRequest request = OpprettJournalpostRequest.builder().build();
 
 		OpprettJournalpostResponse response = opprettJournalpostConsumer.opprettJournalpost("token", request);
@@ -38,7 +35,7 @@ class OpprettJournalpostConsumerTest extends AbstractIt {
 
 	@Test
 	public void shouldNotGetJournalpostWhenConflictDoesNotCorrectHaveBody() {
-		StubOpprettJournalpostResponseConflictWithInvalidResponse();
+		stubOpprettJournalpostResponseConflictWithInvalidResponse();
 
 		assertThrows(
 				SkanmothelseFunctionalException.class,

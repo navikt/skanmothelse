@@ -4,9 +4,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -27,14 +27,13 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class PostboksHelseRouteIT extends AbstractIt {
 	private static final String INNGAAENDE = "inngaaende";
 	private static final String FEILMAPPE = "feilmappe";
-	private static final String BATCHNAME_1 = "BHELSE-20200529-1";
-	private static final String BATCHNAME_2 = "BHELSE.20200529-2";
 
-	@Inject
+	@Autowired
 	private Path sshdPath;
 
 	@BeforeEach
 	void beforeEach() {
+		super.setUpStubs();
 		final Path inngaaende = sshdPath.resolve(INNGAAENDE);
 		final Path processed = inngaaende.resolve("processed");
 		final Path feilmappe = sshdPath.resolve(FEILMAPPE);
@@ -64,8 +63,8 @@ public class PostboksHelseRouteIT extends AbstractIt {
 		// FEIL - BHELSE-20200529-1-4 xml, ocr (mangler pdf)
 		// FEIL - BHELSE-20200529-1-5 pdf, ocr (mangler xml)
 
-		copyFileFromClasspathToInngaaende("BHELSE-20200529-1.zip");
-		setUpHappyStubs();
+		final String BATCHNAME_1 = "BHELSE-20200529-1";
+		copyFileFromClasspathToInngaaende(BATCHNAME_1 + ".zip");
 
 		await().atMost(15, SECONDS).untilAsserted(() -> {
 			try {
@@ -75,7 +74,6 @@ public class PostboksHelseRouteIT extends AbstractIt {
 				fail();
 			}
 		});
-
 
 		final List<String> feilmappeContents = Files.list(sshdPath.resolve(FEILMAPPE).resolve(BATCHNAME_1))
 				.map(p -> FilenameUtils.getName(p.toAbsolutePath().toString()))
@@ -96,8 +94,8 @@ public class PostboksHelseRouteIT extends AbstractIt {
 		// FEIL - BHELSE.20200529-2-4 xml, ocr (mangler pdf)
 		// FEIL - BHELSE.20200529-2-5 pdf, ocr (mangler xml)
 
-		copyFileFromClasspathToInngaaende("BHELSE.20200529-2.zip");
-		setUpHappyStubs();
+		final String BATCHNAME_2 = "BHELSE.20200529-2";
+		copyFileFromClasspathToInngaaende(BATCHNAME_2 + ".zip");
 
 		await().atMost(15, SECONDS).untilAsserted(() -> {
 			try {
@@ -132,7 +130,6 @@ public class PostboksHelseRouteIT extends AbstractIt {
 
 		String zipfilenamenoext = "BHELSE-XML-ORDERED-FIRST-1";
 		copyFileFromClasspathToInngaaende(zipfilenamenoext + ".zip");
-		setUpHappyStubs();
 
 		await().atMost(15, SECONDS).untilAsserted(() -> {
 			try {
