@@ -37,7 +37,7 @@
         <bouncycastle.version>1.70</bouncycastle.version>
 
         <!-- Nyere versjoner av sshd-core vil gi feilmeldingen "JSchException: reject HostKey: localhost" -->
-        <sshd-core.version>2.5.1</sshd-core.version>
+        <sshd-core.version>2.7.0</sshd-core.version>
     </properties>
 
     <dependencyManagement>
