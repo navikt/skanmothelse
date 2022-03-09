@@ -25,6 +25,11 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static org.apache.camel.Exchange.FILE_NAME;
+import static org.apache.camel.Exchange.FILE_NAME_PRODUCED;
+import static org.apache.camel.LoggingLevel.ERROR;
+import static org.apache.camel.LoggingLevel.WARN;
+
 
 @Slf4j
 @Component
@@ -55,20 +60,20 @@ public class PostboksHelseRouteEncrypted extends RouteBuilder {
                 .handled(true)
                 .process(new MdcSetterProcessor())
                 .process(new ErrorMetricsProcessor())
-                .log(LoggingLevel.ERROR, log, "Skanmothelse feilet teknisk for " + KEY_LOGGING_INFO + ". ${exception}")
-                .setHeader(Exchange.FILE_NAME, simple("${exchangeProperty." + PROPERTY_FORSENDELSE_BATCHNAVN + "}/${exchangeProperty." + PROPERTY_FORSENDELSE_FILEBASENAME + "}-teknisk.zip"))
+                .log(ERROR, log, "Skanmothelse feilet teknisk for " + KEY_LOGGING_INFO + ". ${exception}")
+                .setHeader(FILE_NAME, simple("${exchangeProperty." + PROPERTY_FORSENDELSE_BATCHNAVN + "}/${exchangeProperty." + PROPERTY_FORSENDELSE_FILEBASENAME + "}-teknisk.zip"))
                 .to("direct:encrypted_avvik")
-                .log(LoggingLevel.ERROR, log, "Skanmothelse skrev feiletzip=${header." + Exchange.FILE_NAME_PRODUCED + "} til feilmappe. " + KEY_LOGGING_INFO + ".");
+                .log(ERROR, log, "Skanmothelse skrev feiletzip=${header." + FILE_NAME_PRODUCED + "} til feilmappe. " + KEY_LOGGING_INFO + ".");
 
         onException(ZipException.class)
                 .handled(true)
                 .process(new MdcSetterProcessor())
                 .process(new ErrorMetricsProcessor())
-                .log(LoggingLevel.WARN, log, "Feil passord for en fil " + KEY_LOGGING_INFO + ". ${exception}")
-                .setHeader(Exchange.FILE_NAME, simple("${exchangeProperty." + PROPERTY_FORSENDELSE_BATCHNAVN + "}${exchangeProperty." + PROPERTY_FORSENDELSE_FILEBASENAME + "}.enc.zip"))
+                .log(WARN, log, "Feil passord for en fil " + KEY_LOGGING_INFO + ". ${exception}")
+                .setHeader(FILE_NAME, simple("${exchangeProperty." + PROPERTY_FORSENDELSE_BATCHNAVN + "}${exchangeProperty." + PROPERTY_FORSENDELSE_FILEBASENAME + "}.enc.zip"))
                 .to("{{skanmothelse.helse.endpointuri}}/{{skanmothelse.helse.filomraade.feilmappe}}" +
                         "?{{skanmothelse.helse.endpointconfig}}")
-                .log(LoggingLevel.WARN, log, "Skanmothelse skrev feiletzip=${header." + Exchange.FILE_NAME_PRODUCED + "} til feilmappe. " + KEY_LOGGING_INFO + ".")
+                .log(WARN, log, "Skanmothelse skrev feiletzip=${header." + FILE_NAME_PRODUCED + "} til feilmappe. " + KEY_LOGGING_INFO + ".")
                 .end()
                 .process(new MdcRemoverProcessor());
 
@@ -77,10 +82,10 @@ public class PostboksHelseRouteEncrypted extends RouteBuilder {
                 .handled(true)
                 .process(new MdcSetterProcessor())
                 .process(new ErrorMetricsProcessor())
-                .log(LoggingLevel.WARN, log, "Skanmothelse feilet funksjonelt for " + KEY_LOGGING_INFO + ". ${exception}")
-                .setHeader(Exchange.FILE_NAME, simple("${exchangeProperty." + PROPERTY_FORSENDELSE_BATCHNAVN + "}/${exchangeProperty." + PROPERTY_FORSENDELSE_FILEBASENAME + "}.zip"))
+                .log(WARN, log, "Skanmothelse feilet funksjonelt for " + KEY_LOGGING_INFO + ". ${exception}")
+                .setHeader(FILE_NAME, simple("${exchangeProperty." + PROPERTY_FORSENDELSE_BATCHNAVN + "}/${exchangeProperty." + PROPERTY_FORSENDELSE_FILEBASENAME + "}.zip"))
                 .to("direct:encrypted_avvik")
-                .log(LoggingLevel.WARN, log, "Skanmothelse skrev feiletzip=${header." + Exchange.FILE_NAME_PRODUCED + "} til feilmappe. " + KEY_LOGGING_INFO + ".");
+                .log(WARN, log, "Skanmothelse skrev feiletzip=${header." + FILE_NAME_PRODUCED + "} til feilmappe. " + KEY_LOGGING_INFO + ".");
 
         from("{{skanmothelse.helse.endpointuri}}/{{skanmothelse.helse.filomraade.inngaaendemappe}}" +
                 "?{{skanmothelse.helse.endpointconfig}}" +
@@ -128,7 +133,7 @@ public class PostboksHelseRouteEncrypted extends RouteBuilder {
                     .to("{{skanmothelse.helse.endpointuri}}/{{skanmothelse.helse.filomraade.feilmappe}}" +
                             "?{{skanmothelse.helse.endpointconfig}}")
                 .otherwise()
-                    .log(LoggingLevel.ERROR, log, "Skanmothelse teknisk feil der " + KEY_LOGGING_INFO + ". ikke ble flyttet til feilområde. Må analyseres.")
+                    .log(ERROR, log, "Skanmothelse teknisk feil der " + KEY_LOGGING_INFO + ". ikke ble flyttet til feilområde. Må analyseres.")
                 .end()
                 .process(new MdcRemoverProcessor());
 
