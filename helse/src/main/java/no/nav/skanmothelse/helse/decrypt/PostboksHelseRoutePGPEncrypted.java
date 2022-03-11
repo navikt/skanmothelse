@@ -26,6 +26,10 @@ import java.util.concurrent.TimeUnit;
 
 import static no.nav.skanmothelse.metrics.DokCounter.DOMAIN;
 import static no.nav.skanmothelse.metrics.DokCounter.HELSE;
+import static org.apache.camel.Exchange.FILE_NAME;
+import static org.apache.camel.Exchange.FILE_NAME_PRODUCED;
+import static org.apache.camel.LoggingLevel.ERROR;
+import static org.apache.camel.LoggingLevel.WARN;
 
 @Slf4j
 @Component
@@ -55,26 +59,26 @@ public class PostboksHelseRoutePGPEncrypted extends RouteBuilder {
 		String PGP_AVVIK = "direct:pgp_encrypted_avvik_helse";
 		String PROCESS_PGP_ENCRYPTED = "direct:pgp_encrypted_process_helse";
 
+		// @formatter:off
 		onException(Exception.class)
 				.handled(true)
 				.process(new MdcSetterProcessor())
 				.process(new ErrorMetricsProcessor())
-				.log(LoggingLevel.ERROR, log, "Skanmothelse-pgp feilet teknisk for " + KEY_LOGGING_INFO + ". ${exception}")
-				.setHeader(Exchange.FILE_NAME, simple("${exchangeProperty." + PROPERTY_FORSENDELSE_BATCHNAVN + "}/${exchangeProperty." + PROPERTY_FORSENDELSE_FILEBASENAME + "}-teknisk.zip"))
+				.log(ERROR, log, "Skanmothelse-pgp feilet teknisk for " + KEY_LOGGING_INFO + ". ${exception}")
+				.setHeader(FILE_NAME, simple("${exchangeProperty." + PROPERTY_FORSENDELSE_BATCHNAVN + "}/${exchangeProperty." + PROPERTY_FORSENDELSE_FILEBASENAME + "}-teknisk.zip"))
 				.to(PGP_AVVIK)
-				.log(LoggingLevel.ERROR, log, "Skanmothelse-pgp skrev feiletzip=${header." + Exchange.FILE_NAME_PRODUCED + "} til feilmappe. " + KEY_LOGGING_INFO + ".");
-
+				.log(ERROR, log, "Skanmothelse-pgp skrev feiletzip=${header." + FILE_NAME_PRODUCED + "} til feilmappe. " + KEY_LOGGING_INFO + ".");
 
 		// Får ikke dekryptert .zip.pgp - mest sannsynlig mismatch mellom private key og public key
 		onException(PGPException.class)
 				.handled(true)
 				.process(new MdcSetterProcessor())
 				.process(new ErrorMetricsProcessor())
-				.log(LoggingLevel.WARN, log, "Skanmothelse-pgp feilet i dekryptering av .zip.pgp for " + KEY_LOGGING_INFO + ". ${exception}")
-				.setHeader(Exchange.FILE_NAME, simple("${exchangeProperty." + PROPERTY_FORSENDELSE_BATCHNAVN + "}${exchangeProperty." + PROPERTY_FORSENDELSE_FILEBASENAME + "}.zip.pgp"))
+				.log(ERROR, log, "Skanmothelse-pgp feilet i dekryptering av .zip.pgp for " + KEY_LOGGING_INFO + ". ${exception}")
+				.setHeader(FILE_NAME, simple("${exchangeProperty." + PROPERTY_FORSENDELSE_BATCHNAVN + "}${exchangeProperty." + PROPERTY_FORSENDELSE_FILEBASENAME + "}.zip.pgp"))
 				.to("{{skanmothelse.helse.endpointuri}}/{{skanmothelse.helse.filomraade.feilmappe}}" +
 						"?{{skanmothelse.helse.endpointconfig}}")
-				.log(LoggingLevel.WARN, log, "Skanmothelse-pgp skrev feiletzip=${header." + Exchange.FILE_NAME_PRODUCED + "} til feilmappe. " + KEY_LOGGING_INFO + ".")
+				.log(ERROR, log, "Skanmothelse-pgp skrev feiletzip=${header." + FILE_NAME_PRODUCED + "} til feilmappe. " + KEY_LOGGING_INFO + ".")
 				.end()
 				.process(new MdcRemoverProcessor());
 
@@ -83,10 +87,10 @@ public class PostboksHelseRoutePGPEncrypted extends RouteBuilder {
 				.handled(true)
 				.process(new MdcSetterProcessor())
 				.process(new ErrorMetricsProcessor())
-				.log(LoggingLevel.WARN, log, "Skanmothelse-pgp feilet funksjonelt for " + KEY_LOGGING_INFO + ". ${exception}")
-				.setHeader(Exchange.FILE_NAME, simple("${exchangeProperty." + PROPERTY_FORSENDELSE_BATCHNAVN + "}/${exchangeProperty." + PROPERTY_FORSENDELSE_FILEBASENAME + "}.zip"))
+				.log(WARN, log, "Skanmothelse-pgp feilet funksjonelt for " + KEY_LOGGING_INFO + ". ${exception}")
+				.setHeader(FILE_NAME, simple("${exchangeProperty." + PROPERTY_FORSENDELSE_BATCHNAVN + "}/${exchangeProperty." + PROPERTY_FORSENDELSE_FILEBASENAME + "}.zip"))
 				.to(PGP_AVVIK)
-				.log(LoggingLevel.WARN, log, "Skanmothelse-pgp skrev feiletzip=${header." + Exchange.FILE_NAME_PRODUCED + "} til feilmappe. " + KEY_LOGGING_INFO + ".");
+				.log(WARN, log, "Skanmothelse-pgp skrev feiletzip=${header." + FILE_NAME_PRODUCED + "} til feilmappe. " + KEY_LOGGING_INFO + ".");
 
 		from("{{skanmothelse.helse.endpointuri}}/{{skanmothelse.helse.filomraade.inngaaendemappe}}" +
 				"?{{skanmothelse.helse.endpointconfig}}" +
@@ -135,9 +139,11 @@ public class PostboksHelseRoutePGPEncrypted extends RouteBuilder {
 				.to("{{skanmothelse.helse.endpointuri}}/{{skanmothelse.helse.filomraade.feilmappe}}" +
 						"?{{skanmothelse.helse.endpointconfig}}")
 				.otherwise()
-				.log(LoggingLevel.ERROR, log, "Skanmothelse teknisk feil der " + KEY_LOGGING_INFO + ". ikke ble flyttet til feilområde. Må analyseres.")
+				.log(ERROR, log, "Skanmothelse teknisk feil der " + KEY_LOGGING_INFO + ". ikke ble flyttet til feilområde. Må analyseres.")
 				.end()
 				.process(new MdcRemoverProcessor());
+
+		// @formatter:on
 	}
 
 	// Input blir .zip siden .pgp er strippet bort
