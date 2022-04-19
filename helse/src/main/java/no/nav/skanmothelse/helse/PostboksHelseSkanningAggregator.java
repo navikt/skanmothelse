@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import static no.nav.skanmothelse.helse.PostboksHelseRoute.PROPERTY_FORSENDELSE_ZIPNAME;
+import static org.apache.camel.Exchange.AGGREGATED_CORRELATION_KEY;
+import static org.apache.camel.Exchange.FILE_NAME;
 import static org.apache.commons.io.FilenameUtils.getBaseName;
 import static org.apache.commons.io.FilenameUtils.getExtension;
 
@@ -24,7 +26,7 @@ public class PostboksHelseSkanningAggregator implements AggregationStrategy {
     public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
         try {
             if (oldExchange == null) {
-                final PostboksHelseEnvelope envelope = new PostboksHelseEnvelope(newExchange.getProperty(PROPERTY_FORSENDELSE_ZIPNAME, String.class), getBaseName(newExchange.getIn().getHeader(Exchange.FILE_NAME, String.class)));
+                final PostboksHelseEnvelope envelope = new PostboksHelseEnvelope(newExchange.getProperty(PROPERTY_FORSENDELSE_ZIPNAME, String.class), getBaseName(newExchange.getIn().getHeader(FILE_NAME, String.class)));
                 applyOnEnvelope(newExchange, envelope);
                 newExchange.getIn().setBody(envelope);
                 return newExchange;
@@ -40,12 +42,12 @@ public class PostboksHelseSkanningAggregator implements AggregationStrategy {
 
     @Override
     public void timeout(Exchange exchange, int index, int total, long timeout) {
-        final String fil = exchange.getProperty(Exchange.AGGREGATED_CORRELATION_KEY, String.class);
+        final String fil = exchange.getProperty(AGGREGATED_CORRELATION_KEY, String.class);
         log.info("Skanmothelse fant ikke 3 filer under aggreggering av zipfil innen timeout={}ms. Fortsetter behandling. fil={}.", timeout, fil);
     }
 
     private void applyOnEnvelope(Exchange newExchange, PostboksHelseEnvelope envelope) throws IOException {
-        final String extension = getExtension(newExchange.getIn().getHeader(Exchange.FILE_NAME, String.class));
+        final String extension = getExtension(newExchange.getIn().getHeader(FILE_NAME, String.class));
         if (XML_EXTENSION.equals(extension)) {
             final InputStream inputStream = newExchange.getIn().getBody(InputStream.class);
             final byte[] xml = IOUtils.toByteArray(inputStream);
