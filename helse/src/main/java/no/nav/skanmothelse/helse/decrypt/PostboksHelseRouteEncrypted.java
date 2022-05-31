@@ -120,7 +120,9 @@ public class PostboksHelseRouteEncrypted extends RouteBuilder {
         from("direct:encrypted_process_helse")
                 .routeId("encrypted_process_helse")
                 .process(new MdcSetterProcessor())
+                .log(LoggingLevel.INFO, log, "Skanmothelse behandler " + KEY_LOGGING_INFO + ".")
                 .bean(postboksHelseService)
+                .log(LoggingLevel.INFO, log, "Skanmothelse journalførte journalpostId=${body}. " + KEY_LOGGING_INFO + ".")
                 .process(exchange -> DokCounter.incrementCounter("antall_vellykkede", List.of(DokCounter.DOMAIN, DokCounter.HELSE)))
                 .process(new MdcRemoverProcessor());
 
