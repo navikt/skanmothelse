@@ -38,7 +38,7 @@ public class PostboksHelseRoutePGPEncrypted extends RouteBuilder {
 	public static final String PROPERTY_FORSENDELSE_BATCHNAVN = "ForsendelseBatchNavn";
 	public static final String PROPERTY_FORSENDELSE_FILEBASENAME = "ForsendelseFileBasename";
 	public static final String KEY_LOGGING_INFO = "fil=${exchangeProperty." + PROPERTY_FORSENDELSE_FILEBASENAME + "}, batch=${exchangeProperty." + PROPERTY_FORSENDELSE_BATCHNAVN + "}";
-	static final int FORVENTET_ANTALL_PER_FORSENDELSE = 2;
+	static final int FORVENTET_ANTALL_PER_FORSENDELSE = 3;
 
 	private final SkanmothelseProperties skanmothelseProperties;
 	private final PostboksHelseService postboksHelseService;
