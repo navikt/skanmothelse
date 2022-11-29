@@ -67,7 +67,6 @@ public class PostboksHelseRoute extends RouteBuilder {
         from("{{skanmothelse.helse.endpointuri}}/{{skanmothelse.helse.filomraade.inngaaendemappe}}" +
                 "?{{skanmothelse.helse.endpointconfig}}" +
                 "&delay=" + TimeUnit.SECONDS.toMillis(60) +
-                "&antExclude=*enc.zip, *enc.ZIP" +
                 "&antExclude=*zip.pgp, *ZIP.pgp" +
                 "&antInclude=*.zip,*.ZIP" +
                 "&initialDelay=1000" +
