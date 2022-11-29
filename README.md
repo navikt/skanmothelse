@@ -5,9 +5,7 @@ Kvar sjukemelding vil resultere i éi pdf-fil, éi xml-fil og éi ocr-fil.
 
 Du finn meir informasjon om  [skanmothelse på Confluence](https://confluence.adeo.no/display/BOA/skanmothelse).
 
-Dekryptering av filer frå Iron Mountain kan skje på to måtar:
-- dekryptering av aes-krypterte filer
-- dekryptering av pgp-krypterte filer
+Filene vi mottar fra Iron Mountain er kryptert med PGP-kryptering.
 
 I fylgjande lenke finn du [oppskrift for skifte av pgp-nøkkelpar](https://confluence.adeo.no/display/BOA/PGP-kryptering+for+filer).
 
