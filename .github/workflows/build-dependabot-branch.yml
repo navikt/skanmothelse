@@ -1,4 +1,4 @@
-name: Dependabot PR
+name: Build Dependabot PR branch
 on:
   push:
     branches:
