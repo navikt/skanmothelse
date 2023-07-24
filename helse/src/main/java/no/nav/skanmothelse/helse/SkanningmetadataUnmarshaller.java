@@ -1,6 +1,7 @@
 package no.nav.skanmothelse.helse;
 
 import no.nav.skanmothelse.exceptions.functional.SkanningmetadataValidationException;
+import no.nav.skanmothelse.exceptions.technical.SkanmothelseTechnicalException;
 import no.nav.skanmothelse.helse.domain.Skanningmetadata;
 import org.apache.camel.Body;
 import org.apache.camel.Handler;
@@ -22,10 +23,20 @@ import java.io.ByteArrayInputStream;
 
 
 public class SkanningmetadataUnmarshaller {
+
+    private final JAXBContext jaxbContext;
+
+    public SkanningmetadataUnmarshaller() {
+        try {
+            this.jaxbContext = JAXBContext.newInstance(Skanningmetadata.class);
+        } catch (JAXBException e) {
+            throw new SkanmothelseTechnicalException("Klarte ikke instansiere JAXBContext", e);
+        }
+    }
+
     @Handler
     PostboksHelseEnvelope unmarshal(@Body PostboksHelseEnvelope envelope) {
         try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(Skanningmetadata.class);
             SchemaFactory schemaFactory = createXEEProtectedSchemaFactory();
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             jaxbUnmarshaller.setSchema(schemaFactory.newSchema(new StreamSource(this.getClass().getResourceAsStream("/postboks-helse-1.0.0.xsd"))));
