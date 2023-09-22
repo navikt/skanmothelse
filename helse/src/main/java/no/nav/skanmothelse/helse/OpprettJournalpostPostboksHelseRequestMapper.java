@@ -1,6 +1,7 @@
 package no.nav.skanmothelse.helse;
 
 import no.nav.skanmothelse.exceptions.functional.SkanmothelseFunctionalException;
+import no.nav.skanmothelse.helse.PostboksHelseTema.PostboksHelse;
 import no.nav.skanmothelse.helse.domain.Journalpost;
 import no.nav.skanmothelse.helse.domain.Skanninginfo;
 import no.nav.skanmothelse.helse.domain.Skanningmetadata;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class OpprettJournalpostPostboksHelseRequestMapper {
@@ -41,14 +42,14 @@ public class OpprettJournalpostPostboksHelseRequestMapper {
 
     public OpprettJournalpostRequest mapRequest(PostboksHelseEnvelope envelope) {
         final String strekkodePostboks = envelope.getSkanningmetadata().getSkanninginfo().getStrekkodePostboks();
-        final PostboksHelseTema.PostboksHelse postboks = PostboksHelseTema.lookup(strekkodePostboks);
+        final PostboksHelse postboks = PostboksHelseTema.lookup(strekkodePostboks);
         if (postboks == null) {
             throw new SkanmothelseFunctionalException("Fant ikke postboks metadata for strekkodePostboks=" + strekkodePostboks);
         }
         return doMap(envelope, postboks);
     }
 
-    private OpprettJournalpostRequest doMap(PostboksHelseEnvelope envelope, PostboksHelseTema.PostboksHelse postboks) {
+    private OpprettJournalpostRequest doMap(PostboksHelseEnvelope envelope, PostboksHelse postboks) {
         final Skanningmetadata skanningmetadata = envelope.getSkanningmetadata();
         Journalpost journalpost = skanningmetadata.getJournalpost();
         Skanninginfo skanningInfo = skanningmetadata.getSkanninginfo();
@@ -82,12 +83,13 @@ public class OpprettJournalpostPostboksHelseRequestMapper {
                         .build()
                 ).orElse(null);
 
-        List<Tilleggsopplysning> tilleggsopplysninger = List.of(
-                new Tilleggsopplysning(ENDORSERNR, journalpost.getEndorsernr()),
-                new Tilleggsopplysning(FYSISKPOSTBOKS, skanningInfo.getFysiskPostboks()),
-                new Tilleggsopplysning(STREKKODEPOSTBOKS, skanningInfo.getStrekkodePostboks()),
-                new Tilleggsopplysning(ANTALL_SIDER, journalpost.getAntallSider())
-        ).stream().filter(tilleggsopplysning -> notNullOrEmpty(tilleggsopplysning.getVerdi())).collect(Collectors.toList());
+        List<Tilleggsopplysning> tilleggsopplysninger = Stream.of(
+                        new Tilleggsopplysning(ENDORSERNR, journalpost.getEndorsernr()),
+                        new Tilleggsopplysning(FYSISKPOSTBOKS, skanningInfo.getFysiskPostboks()),
+                        new Tilleggsopplysning(STREKKODEPOSTBOKS, skanningInfo.getStrekkodePostboks()),
+                        new Tilleggsopplysning(ANTALL_SIDER, journalpost.getAntallSider()))
+                .filter(tilleggsopplysning -> notNullOrEmpty(tilleggsopplysning.verdi()))
+                .toList();
 
         String datoMottatt = journalpost.getDatoMottatt() == null
                 ? null
@@ -108,7 +110,7 @@ public class OpprettJournalpostPostboksHelseRequestMapper {
                 .build();
     }
 
-    private Dokument createDokument(final PostboksHelseEnvelope envelope, final PostboksHelseTema.PostboksHelse postboks,
+    private Dokument createDokument(final PostboksHelseEnvelope envelope, final PostboksHelse postboks,
                                     final DokumentVariant pdf, final DokumentVariant xml, final String batchnavn) {
         if (envelope.getOcr() == null) {
             return Dokument.builder()

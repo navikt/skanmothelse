@@ -20,8 +20,9 @@ import java.time.Duration;
 
 import static java.util.Collections.singletonList;
 import static no.nav.skanmothelse.config.LocalCacheConfig.STS_CACHE;
-import static no.nav.skanmothelse.lagrefildetaljer.RetryConstants.RETRY_DELAY;
+import static no.nav.skanmothelse.lagrefildetaljer.NavHeaders.createNavCustomHeaders;
 import static no.nav.skanmothelse.lagrefildetaljer.RetryConstants.MAX_RETRIES;
+import static no.nav.skanmothelse.lagrefildetaljer.RetryConstants.RETRY_DELAY;
 import static no.nav.skanmothelse.metrics.MetricLabels.DOK_METRIC;
 import static no.nav.skanmothelse.metrics.MetricLabels.PROCESS_NAME;
 import static org.springframework.http.HttpMethod.POST;
@@ -30,7 +31,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
 public class STSConsumer {
-	private final String urlEncodedBody = "grant_type=client_credentials&scope=openid";
 
 	private final RestTemplate restTemplate;
 	private final String stsUrl;
@@ -55,6 +55,7 @@ public class STSConsumer {
 	public STSResponse getSTSToken() {
 		try {
 			HttpHeaders headers = createHeaders();
+			final String urlEncodedBody = "grant_type=client_credentials&scope=openid";
 			HttpEntity<String> requestEntity = new HttpEntity<>(urlEncodedBody, headers);
 
 			return restTemplate.exchange(stsUrl, POST, requestEntity, STSResponse.class)
@@ -73,7 +74,7 @@ public class STSConsumer {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(APPLICATION_FORM_URLENCODED);
 		headers.setAccept(singletonList(APPLICATION_JSON));
-		headers.addAll(NavHeaders.createNavCustomHeaders());
+		headers.addAll(createNavCustomHeaders());
 		return headers;
 	}
 }

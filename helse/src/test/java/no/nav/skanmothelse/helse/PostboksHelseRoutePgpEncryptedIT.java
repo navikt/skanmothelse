@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.exactly;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
@@ -69,7 +68,8 @@ public class PostboksHelseRoutePgpEncryptedIT extends AbstractIt {
 		await().atMost(15, SECONDS).untilAsserted(() -> {
 			try {
 				assertThat(Files.list(sshdPath.resolve(FEILMAPPE).resolve(BATCHNAME))
-						.collect(Collectors.toList())).hasSize(3);
+						.toList())
+						.hasSize(3);
 			} catch (NoSuchFileException e) {
 				fail();
 			}
@@ -77,7 +77,7 @@ public class PostboksHelseRoutePgpEncryptedIT extends AbstractIt {
 
 		final List<String> feilmappeContents = Files.list(sshdPath.resolve(FEILMAPPE).resolve(BATCHNAME))
 				.map(p -> FilenameUtils.getName(p.toAbsolutePath().toString()))
-				.collect(Collectors.toList());
+				.toList();
 		assertThat(feilmappeContents).containsExactlyInAnyOrder(
 				"BHELSE-20200529-4-3x.zip",
 				"BHELSE-20200529-4-4x.zip",
@@ -100,7 +100,8 @@ public class PostboksHelseRoutePgpEncryptedIT extends AbstractIt {
 		await().atMost(15, SECONDS).untilAsserted(() -> {
 			try {
 				assertThat(Files.list(sshdPath.resolve(FEILMAPPE).resolve(BATCHNAME))
-						.collect(Collectors.toList())).hasSize(3);
+						.toList())
+						.hasSize(3);
 			} catch (NoSuchFileException e) {
 				fail();
 			}
@@ -108,7 +109,7 @@ public class PostboksHelseRoutePgpEncryptedIT extends AbstractIt {
 
 		final List<String> feilmappeContents = Files.list(sshdPath.resolve(FEILMAPPE).resolve(BATCHNAME))
 				.map(p -> FilenameUtils.getName(p.toAbsolutePath().toString()))
-				.collect(Collectors.toList());
+				.toList();
 		assertThat(feilmappeContents).containsExactlyInAnyOrder(
 				"BHELSE.20200529-4-3x.zip",
 				"BHELSE.20200529-4-4x.zip",

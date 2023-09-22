@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
@@ -47,7 +46,7 @@ public class SkanningmetadataUnmarshallerTest {
         assertThat(journalpost.getBruker().getBrukerId()).isEqualTo(BRUKER.getBrukerId());
         assertThat(journalpost.getBruker().getBrukerType()).isEqualTo(BRUKER.getBrukerType());
         assertThat(journalpost.getMottakskanal()).isEqualTo(MOTTAKSKANAL);
-        assertThat(journalpost.getDatoMottatt().isEqual(DATOMOTTATT)).isEqualTo(true);
+        assertThat(journalpost.getDatoMottatt().isEqual(DATOMOTTATT)).isTrue();
         assertThat(journalpost.getBatchnavn()).isEqualTo(BATCHNAVN);
         assertThat(journalpost.getFilNavn()).isEqualTo(FILNAVN);
         assertThat(journalpost.getEndorsernr()).isEqualTo(ENDORSERNR);
@@ -77,13 +76,13 @@ public class SkanningmetadataUnmarshallerTest {
         assertThat(skanninginfo.getFysiskPostboks()).isEqualTo(FYSISKPOSTBOKS);
         assertThat(skanninginfo.getStrekkodePostboks()).isEqualTo(STREKKODEPOSTBOKS);
 
-        assertThat(journalpost.getBruker()).isEqualTo(null);
+        assertThat(journalpost.getBruker()).isNull();
         assertThat(journalpost.getMottakskanal()).isEqualTo(MOTTAKSKANAL);
-        assertThat(journalpost.getDatoMottatt().isEqual(DATOMOTTATT)).isEqualTo(true);
+        assertThat(journalpost.getDatoMottatt().isEqual(DATOMOTTATT)).isTrue();
         assertThat(journalpost.getBatchnavn()).isEqualTo(BATCHNAVN);
-        assertThat(journalpost.getFilNavn()).isEqualTo(null);
-        assertThat(journalpost.getEndorsernr()).isEqualTo(null);
-        assertThat(journalpost.getAntallSider()).isEqualTo(null);
+        assertThat(journalpost.getFilNavn()).isNull();
+        assertThat(journalpost.getEndorsernr()).isNull();
+        assertThat(journalpost.getAntallSider()).isNull();
     }
 
     @Test
@@ -141,7 +140,7 @@ public class SkanningmetadataUnmarshallerTest {
         assertThat(journalpost.getBruker().getBrukerId()).isEqualTo(BRUKER.getBrukerId());
         assertThat(journalpost.getBruker().getBrukerType()).isEqualTo(BRUKER.getBrukerType());
         assertThat(journalpost.getMottakskanal()).isEqualTo(MOTTAKSKANAL);
-        assertThat(journalpost.getDatoMottatt().isEqual(DATOMOTTATT)).isEqualTo(true);
+        assertThat(journalpost.getDatoMottatt().isEqual(DATOMOTTATT)).isTrue();
         assertThat(journalpost.getBatchnavn()).isEqualTo(BATCHNAVN);
         assertThat(journalpost.getFilNavn()).isEqualTo("");
         assertThat(journalpost.getEndorsernr()).isEqualTo("");

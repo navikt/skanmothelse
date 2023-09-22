@@ -27,18 +27,14 @@ class PostboksHelseEnvelopeTest {
 
     @Test
     void shouldThrowExceptionWhenValidateNoXml() {
-        assertThrows(ForsendelseNotCompleteException.class, () -> {
-            createBaseEnvelope().xml(null).build()
-                    .validate();
-        }, "Fant ikke filnavn=" + FILEBASENAME + ".xml i zip=" + ZIPNAME);
+        assertThrows(ForsendelseNotCompleteException.class, () -> createBaseEnvelope().xml(null).build()
+                .validate(), "Fant ikke filnavn=" + FILEBASENAME + ".xml i zip=" + ZIPNAME);
     }
 
     @Test
     void shouldThrowExceptionWhenValidateNoPdf() {
-        assertThrows(ForsendelseNotCompleteException.class, () -> {
-            createBaseEnvelope().pdf(null).build()
-                    .validate();
-        }, "Fant ikke filnavn=" + FILEBASENAME + ".pdf i zip=" + ZIPNAME);
+        assertThrows(ForsendelseNotCompleteException.class, () -> createBaseEnvelope().pdf(null).build()
+                .validate(), "Fant ikke filnavn=" + FILEBASENAME + ".pdf i zip=" + ZIPNAME);
     }
 
     @Test

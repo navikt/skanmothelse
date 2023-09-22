@@ -11,29 +11,18 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class OpprettJournalpostRequest {
-    private String tittel;
-
-    private AvsenderMottaker avsenderMottaker;
-
-    private String journalpostType;
-
-    private String tema;
-
-    private String behandlingstema;
-
-    private String kanal;
-
-    private String datoMottatt;
-
-    private String journalfoerendeEnhet;
-
-    private String eksternReferanseId;
-
-    private List<Tilleggsopplysning> tilleggsopplysninger;
-
-    private Bruker bruker;
-
+    String tittel;
+    AvsenderMottaker avsenderMottaker;
+    String journalpostType;
+    String tema;
+    String behandlingstema;
+    String kanal;
+    String datoMottatt;
+    String journalfoerendeEnhet;
+    String eksternReferanseId;
+    List<Tilleggsopplysning> tilleggsopplysninger;
+    Bruker bruker;
 
     @NotNull(message = "dokumenter kan ikke være null")
-    private List<Dokument> dokumenter;
+    List<Dokument> dokumenter;
 }

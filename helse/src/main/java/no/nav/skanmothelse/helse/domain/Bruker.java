@@ -14,7 +14,6 @@ import javax.xml.bind.annotation.XmlElement;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Bruker {
 

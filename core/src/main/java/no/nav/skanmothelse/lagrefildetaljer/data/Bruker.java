@@ -9,7 +9,8 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class Bruker {
     @NotNull(message = "id kan ikke være null")
-    private String id;
+    String id;
+
     @NotNull(message = "idType kan ikke være null")
-    private String idType;
+    String idType;
 }

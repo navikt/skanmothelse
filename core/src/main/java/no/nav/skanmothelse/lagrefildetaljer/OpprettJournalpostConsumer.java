@@ -21,8 +21,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
 
-import static no.nav.skanmothelse.lagrefildetaljer.RetryConstants.RETRY_DELAY;
 import static no.nav.skanmothelse.lagrefildetaljer.RetryConstants.MAX_RETRIES;
+import static no.nav.skanmothelse.lagrefildetaljer.RetryConstants.RETRY_DELAY;
 import static no.nav.skanmothelse.metrics.MetricLabels.DOK_METRIC;
 import static no.nav.skanmothelse.metrics.MetricLabels.PROCESS_NAME;
 import static org.springframework.http.HttpMethod.POST;
@@ -63,7 +63,7 @@ public class OpprettJournalpostConsumer {
 					OpprettJournalpostResponse journalpost = mapper.readValue(e.getResponseBodyAsString(), OpprettJournalpostResponse.class);
 					log.info("Det eksisterer allerede en journalpost i dokarkiv med fil={}. Denne har journalpostId={}. Oppretter ikke ny journalpost.",
 							opprettJournalpostRequest.getEksternReferanseId(),
-							journalpost.getJournalpostId());
+							journalpost.journalpostId());
 					return journalpost;
 				} catch (JsonProcessingException jsonProcessingException) {
 					throw new SkanmothelseFunctionalException("Ikke mulig å konvertere respons ifra dokarkiv.", e);
