@@ -9,11 +9,10 @@ import static no.nav.skanmothelse.helse.PostboksHelseRoute.PROPERTY_FORSENDELSE_
 import static no.nav.skanmothelse.helse.PostboksHelseRoute.PROPERTY_FORSENDELSE_FILEBASENAME;
 import static no.nav.skanmothelse.helse.PostboksHelseRoute.PROPERTY_FORSENDELSE_ZIPNAME;
 
-
 public class MdcSetterProcessor implements Processor {
 
     @Override
-    public void process(Exchange exchange) throws Exception {
+    public void process(Exchange exchange) {
         final String exchangeId = exchange.getExchangeId();
         if (exchangeId != null) {
             MDC.put(MDCConstants.MDC_CALL_ID, exchangeId);

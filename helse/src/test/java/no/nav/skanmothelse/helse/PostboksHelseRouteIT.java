@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.exactly;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
@@ -69,7 +68,8 @@ public class PostboksHelseRouteIT extends AbstractIt {
 		await().atMost(15, SECONDS).untilAsserted(() -> {
 			try {
 				assertThat(Files.list(sshdPath.resolve(FEILMAPPE).resolve(BATCHNAME_1))
-						.collect(Collectors.toList())).hasSize(3);
+						.toList())
+						.hasSize(3);
 			} catch (NoSuchFileException e) {
 				fail();
 			}
@@ -77,7 +77,7 @@ public class PostboksHelseRouteIT extends AbstractIt {
 
 		final List<String> feilmappeContents = Files.list(sshdPath.resolve(FEILMAPPE).resolve(BATCHNAME_1))
 				.map(p -> FilenameUtils.getName(p.toAbsolutePath().toString()))
-				.collect(Collectors.toList());
+				.toList();
 		assertThat(feilmappeContents).containsExactlyInAnyOrder(
 				"BHELSE-20200529-1-3.zip",
 				"BHELSE-20200529-1-4.zip",
@@ -100,7 +100,8 @@ public class PostboksHelseRouteIT extends AbstractIt {
 		await().atMost(15, SECONDS).untilAsserted(() -> {
 			try {
 				assertThat(Files.list(sshdPath.resolve(FEILMAPPE).resolve(BATCHNAME_2))
-						.collect(Collectors.toList())).hasSize(3);
+						.toList())
+						.hasSize(3);
 			} catch (NoSuchFileException e) {
 				fail();
 			}
@@ -108,7 +109,7 @@ public class PostboksHelseRouteIT extends AbstractIt {
 
 		final List<String> feilmappeContents = Files.list(sshdPath.resolve(FEILMAPPE).resolve(BATCHNAME_2))
 				.map(p -> FilenameUtils.getName(p.toAbsolutePath().toString()))
-				.collect(Collectors.toList());
+				.toList();
 		assertThat(feilmappeContents).containsExactlyInAnyOrder(
 				"BHELSE.20200529-2-3.zip",
 				"BHELSE.20200529-2-4.zip",
@@ -134,7 +135,8 @@ public class PostboksHelseRouteIT extends AbstractIt {
 		await().atMost(15, SECONDS).untilAsserted(() -> {
 			try {
 				assertThat(Files.list(sshdPath.resolve(FEILMAPPE).resolve(zipfilenamenoext))
-						.collect(Collectors.toList())).hasSize(3);
+						.toList())
+						.hasSize(3);
 			} catch (NoSuchFileException e) {
 				fail();
 			}
@@ -142,7 +144,7 @@ public class PostboksHelseRouteIT extends AbstractIt {
 
 		final List<String> feilmappeContents = Files.list(sshdPath.resolve(FEILMAPPE).resolve(zipfilenamenoext))
 				.map(p -> FilenameUtils.getName(p.toAbsolutePath().toString()))
-				.collect(Collectors.toList());
+				.toList();
 		assertThat(feilmappeContents).containsExactlyInAnyOrder(
 				"BHELSE-XML-ORDERED-FIRST-1-03.zip",
 				"BHELSE-XML-ORDERED-FIRST-1-04.zip",

@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.EnableRetry;
 
-import java.io.IOException;
-
 import static com.github.tomakehurst.wiremock.client.WireMock.exactly;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
@@ -30,7 +28,7 @@ class OpprettJournalpostConsumerTest extends AbstractIt {
 		OpprettJournalpostRequest request = OpprettJournalpostRequest.builder().build();
 
 		OpprettJournalpostResponse response = opprettJournalpostConsumer.opprettJournalpost("token", request);
-		assertEquals("567010363", response.getJournalpostId());
+		assertEquals("567010363", response.journalpostId());
 	}
 
 	@Test

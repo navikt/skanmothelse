@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class DokCounter {
@@ -30,21 +29,9 @@ public class DokCounter {
         DokCounter.meterRegistry = meterRegistry;
     }
 
-    public static void incrementCounter(Map<String, String> metadata){
-        metadata.forEach(DokCounter::incrementCounter);
-    }
-
     public static void incrementCounter(String key, List<String> tags) {
         Counter.builder(DOK_SKANMOTHELSE + key + TOTAL)
                 .tags(tags.toArray(new String[0]))
-                .register(meterRegistry)
-                .increment();
-    }
-
-
-    private static void incrementCounter(String key, String value) {
-        Counter.builder(DOK_SKANMOTHELSE + key + TOTAL)
-                .tags(key, value)
                 .register(meterRegistry)
                 .increment();
     }

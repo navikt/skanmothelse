@@ -30,6 +30,6 @@ public class PostboksHelseService {
         }
         OpprettJournalpostRequest request = mapper.mapRequest(envelope);
         final OpprettJournalpostResponse opprettJournalpostResponse = opprettJournalpostService.opprettJournalpost(request);
-        return opprettJournalpostResponse.getJournalpostId();
+        return opprettJournalpostResponse.journalpostId();
     }
 }

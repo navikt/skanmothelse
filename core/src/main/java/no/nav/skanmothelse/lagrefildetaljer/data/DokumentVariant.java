@@ -9,16 +9,16 @@ import jakarta.validation.constraints.NotNull;
 @Builder
 public class DokumentVariant {
     @NotNull(message = "filtype kan ikke være null")
-    private String filtype;
+    String filtype;
 
     @NotNull(message = "fysiskDokument kan ikke være null")
-    private byte[] fysiskDokument;
+    byte[] fysiskDokument;
 
     @NotNull(message = "variantformat kan ikke være null")
-    private String variantformat;
+    String variantformat;
 
     @NotNull(message = "navn kan ikke være null")
-    private String filnavn;
+    String filnavn;
 
-    private String batchnavn;
+    String batchnavn;
 }

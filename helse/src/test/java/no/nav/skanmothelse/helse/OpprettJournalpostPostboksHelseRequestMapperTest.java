@@ -53,7 +53,7 @@ class OpprettJournalpostPostboksHelseRequestMapperTest {
         assertThat(request.getEksternReferanseId()).isEqualTo(FILEBASENAME + ".pdf");
         assertThat(request.getDatoMottatt()).isEqualTo(DATO_MOTTATT.toString());
         assertThat(request.getTilleggsopplysninger()).hasSize(4);
-        assertThat(request.getTilleggsopplysninger()).extracting(Tilleggsopplysning::getNokkel, Tilleggsopplysning::getVerdi)
+        assertThat(request.getTilleggsopplysninger()).extracting(Tilleggsopplysning::nokkel, Tilleggsopplysning::verdi)
                 .containsExactly(tuple(OpprettJournalpostPostboksHelseRequestMapper.ENDORSERNR, ENDORSERNR),
                         tuple(OpprettJournalpostPostboksHelseRequestMapper.FYSISKPOSTBOKS, FYSISK_POSTBOKS),
                         tuple(OpprettJournalpostPostboksHelseRequestMapper.STREKKODEPOSTBOKS, STREKKODE_POSTBOKS),
@@ -102,8 +102,9 @@ class OpprettJournalpostPostboksHelseRequestMapperTest {
                                 .build())
                         .build())
                 .build());
-        assertThat(request.getTilleggsopplysninger()).hasSize(2);
-        assertThat(request.getTilleggsopplysninger()).extracting(Tilleggsopplysning::getNokkel, Tilleggsopplysning::getVerdi)
+        assertThat(request.getTilleggsopplysninger())
+                .hasSize(2)
+                .extracting(Tilleggsopplysning::nokkel, Tilleggsopplysning::verdi)
                 .containsExactly(tuple(OpprettJournalpostPostboksHelseRequestMapper.FYSISKPOSTBOKS, FYSISK_POSTBOKS),
                         tuple(OpprettJournalpostPostboksHelseRequestMapper.STREKKODEPOSTBOKS, STREKKODE_POSTBOKS));
     }

@@ -18,7 +18,6 @@ import org.bouncycastle.openpgp.operator.jcajce.JcePublicKeyDataDecryptorFactory
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.NoSuchProviderException;
 import java.util.Iterator;
 
 import static no.nav.skanmothelse.pgpDecrypt.manuelltesting.PGPKeyUtil.findSecretKey;
@@ -36,7 +35,7 @@ public class PGPDecryptUtil {
 			InputStream encryptedDataStream,
 			InputStream privateKeyStream,
 			char[] passwd)
-			throws IOException, NoSuchProviderException, PGPException {
+			throws IOException, PGPException {
 		InputStream in = PGPUtil.getDecoderStream(encryptedDataStream);
 
 		try (privateKeyStream) {
@@ -62,7 +61,7 @@ public class PGPDecryptUtil {
 		}
 	}
 
-	private static InputStream findPrivateKeyAndDecrypt(InputStream privateKeyStream, char[] passwd, PGPEncryptedDataList encryptedDataList) throws IOException, PGPException, NoSuchProviderException {
+	private static InputStream findPrivateKeyAndDecrypt(InputStream privateKeyStream, char[] passwd, PGPEncryptedDataList encryptedDataList) throws IOException, PGPException {
 		// Find secret key (private key)
 		PGPPrivateKey pgpPrivateKey = null;
 		PGPPublicKeyEncryptedData publicKeyEncryptedData = null;
