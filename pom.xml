@@ -33,7 +33,7 @@
 		<bouncycastle.version>1.70</bouncycastle.version>
 
 		<!-- test -->
-		<sshd-core.version>2.10.0</sshd-core.version>
+		<sshd-core.version>2.11.0</sshd-core.version>
 		<spring-cloud-contract-wiremock.version>4.0.4</spring-cloud-contract-wiremock.version>
 
 		<!-- Plugins -->
