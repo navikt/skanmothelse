@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.1</version>
+		<version>3.4.3</version>
 	</parent>
 
 	<groupId>no.nav.skanmothelse</groupId>
@@ -30,10 +30,10 @@
 		<logstash-logback-encoder.version>8.0</logstash-logback-encoder.version>
 		<commons-compress.version>1.27.1</commons-compress.version>
 		<commons-io.version>2.18.0</commons-io.version>
-		<bouncycastle.version>1.79</bouncycastle.version>
+		<bouncycastle.version>1.80</bouncycastle.version>
 
 		<!-- test -->
-		<sshd-core.version>2.14.0</sshd-core.version>
+		<sshd-core.version>2.15.0</sshd-core.version>
 		<spring-cloud-contract-wiremock.version>4.2.0</spring-cloud-contract-wiremock.version>
 
 		<!-- Plugins -->
@@ -84,7 +84,7 @@
 			<!-- decrypt pgp-->
 			<dependency>
 				<groupId>org.bouncycastle</groupId>
-				<artifactId>bcprov-jdk18on</artifactId>
+				<artifactId>bcutil-jdk18on</artifactId>
 				<version>${bouncycastle.version}</version>
 			</dependency>
 			<dependency>
