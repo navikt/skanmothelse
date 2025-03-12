@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PostboksHelseService {
 	private final OpprettJournalpostPostboksHelseRequestMapper mapper;
-	private OpprettJournalpostConsumer opprettJournalpostConsumer;
+	private final OpprettJournalpostConsumer opprettJournalpostConsumer;
 
 	@Autowired
 	public PostboksHelseService(OpprettJournalpostPostboksHelseRequestMapper mapper,
