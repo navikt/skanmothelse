@@ -1,4 +1,4 @@
-package no.nav.skanmothelse.lagrefildetaljer;
+package no.nav.skanmothelse.journalpostapi;
 
 public final class RetryConstants {
 	public static final int MAX_RETRIES = 5;
