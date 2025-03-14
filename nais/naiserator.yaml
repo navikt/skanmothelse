@@ -60,3 +60,6 @@ spec:
         mountPath: /var/run/secrets/nais.io/srvskanmothelse
       - kvPath: {{ SFTP_KEYS }}
         mountPath: /var/run/secrets/nais.io/keys
+  azure:
+    application:
+      enabled: true
