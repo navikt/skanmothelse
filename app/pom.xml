@@ -21,6 +21,10 @@
 			<groupId>no.nav.skanmothelse</groupId>
 			<artifactId>helse</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>no.nav.skanmothelse</groupId>
+			<artifactId>avstem</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

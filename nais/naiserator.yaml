@@ -25,6 +25,8 @@ spec:
       value: {{ SKANMOTHELSE_VAULT_BACKEND }}
     - name: SKANMOTHELSE_VAULT_KUBERNETESPATH
       value: {{ SKANMOTHELSE_VAULT_KUBERNETESPATH }}
+    - name: SKANMOTHELSE_JIRA_URL
+      value: {{ SKANMOTHELSE_JIRA_URL }}
   image: {{ image }}
   ingresses:
     {{#each INGRESSES}}
@@ -60,6 +62,8 @@ spec:
         mountPath: /var/run/secrets/nais.io/srvskanmothelse
       - kvPath: {{ SFTP_KEYS }}
         mountPath: /var/run/secrets/nais.io/keys
+      - kvPath: {{ SRVJIRADOKDISTAVSTEMMING }}
+        mountPath: /var/run/secrets/nais.io/srvjiradokdistavstemming
   azure:
     application:
       enabled: true

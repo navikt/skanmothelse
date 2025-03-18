@@ -19,6 +19,7 @@
 		<module>app</module>
 		<module>core</module>
 		<module>helse</module>
+		<module>avstem</module>
 	</modules>
 
 	<properties>
@@ -32,6 +33,8 @@
 		<commons-io.version>2.18.0</commons-io.version>
 		<bouncycastle.version>1.80</bouncycastle.version>
 		<context-propagation.version>1.1.2</context-propagation.version>
+		<jiraapi.version>1.1.4</jiraapi.version>
+
 
 		<!-- test -->
 		<sshd-core.version>2.15.0</sshd-core.version>
@@ -52,6 +55,17 @@
 				<groupId>no.nav.skanmothelse</groupId>
 				<artifactId>helse</artifactId>
 				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>no.nav.skanmothelse</groupId>
+				<artifactId>avstem</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>no.nav.dok-common</groupId>
+				<artifactId>jiraapi</artifactId>
+				<version>${jiraapi.version}</version>
 			</dependency>
 
 			<dependency>
