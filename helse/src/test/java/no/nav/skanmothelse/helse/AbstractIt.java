@@ -27,14 +27,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class AbstractIt {
 
 	static final String URL_DOKARKIV_JOURNALPOST_GEN = "/rest/journalpostapi/v1/journalpost\\?foersoekFerdigstill=false";
-	private static final String STS_URL = "/rest/v1/sts/token";
 
 	void setUpStubs() {
-		stubFor(post(urlMatching(STS_URL)).willReturn(aResponse()
-				.withHeader("Content-Type", "application/json")
-				.withHeader("Connection", "close")
-				.withBodyFile("sts/token.json"))
-		);
+		stubAzureToken();
 
 		stubFor(post(urlMatching(URL_DOKARKIV_JOURNALPOST_GEN)).willReturn(aResponse()
 				.withStatus(OK.value())
@@ -44,20 +39,20 @@ public class AbstractIt {
 		);
 	}
 
+	public void stubAzureToken() {
+		stubFor(post("/azure_token")
+				.willReturn(aResponse()
+						.withStatus(OK.value())
+						.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+						.withBodyFile("azure/token_response.json")));
+	}
+
 	public void stubOpprettJournalpostResponseConflictWithValidResponse() {
 		stubFor(post("/rest/journalpostapi/v1/journalpost?foersoekFerdigstill=false").willReturn(aResponse()
 				.withStatus(CONFLICT.value())
 				.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
 				.withHeader("Connection", "close")
 				.withBodyFile("journalpostapi/allerede_opprett_journalpost_response_HAPPY.json"))
-		);
-	}
-
-	protected void stubOpprettJournalpostResponseConflictWithInvalidResponse() {
-		stubFor(post("/rest/journalpostapi/v1/journalpost?foersoekFerdigstill=false").willReturn(aResponse()
-				.withStatus(CONFLICT.value())
-				.withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-				.withHeader("Connection", "close"))
 		);
 	}
 }

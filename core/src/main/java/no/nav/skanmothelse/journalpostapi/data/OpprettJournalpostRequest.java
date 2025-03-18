@@ -1,4 +1,4 @@
-package no.nav.skanmothelse.lagrefildetaljer.data;
+package no.nav.skanmothelse.journalpostapi.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

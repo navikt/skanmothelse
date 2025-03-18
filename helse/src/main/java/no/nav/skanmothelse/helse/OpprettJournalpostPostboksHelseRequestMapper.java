@@ -5,11 +5,11 @@ import no.nav.skanmothelse.helse.PostboksHelseTema.PostboksHelse;
 import no.nav.skanmothelse.helse.domain.Journalpost;
 import no.nav.skanmothelse.helse.domain.Skanninginfo;
 import no.nav.skanmothelse.helse.domain.Skanningmetadata;
-import no.nav.skanmothelse.lagrefildetaljer.data.Bruker;
-import no.nav.skanmothelse.lagrefildetaljer.data.Dokument;
-import no.nav.skanmothelse.lagrefildetaljer.data.DokumentVariant;
-import no.nav.skanmothelse.lagrefildetaljer.data.OpprettJournalpostRequest;
-import no.nav.skanmothelse.lagrefildetaljer.data.Tilleggsopplysning;
+import no.nav.skanmothelse.journalpostapi.data.Bruker;
+import no.nav.skanmothelse.journalpostapi.data.Dokument;
+import no.nav.skanmothelse.journalpostapi.data.DokumentVariant;
+import no.nav.skanmothelse.journalpostapi.data.OpprettJournalpostRequest;
+import no.nav.skanmothelse.journalpostapi.data.Tilleggsopplysning;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

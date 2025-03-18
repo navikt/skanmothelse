@@ -1,7 +1,8 @@
 {
   "SRVSKANMOTHELSE": "/serviceuser/data/dev/srvskanmothelse",
   "SFTP_KEYS": "kv/preprod/fss/skanmothelse/keys",
-  "SKANMOTHELSE_DOKARKIVJOURNALPOSTURL": "http://dokarkiv.teamdokumenthandtering.svc.nais.local/rest/journalpostapi/v1/journalpost?foersoekFerdigstill=false",
+  "SKANMOTHELSE_ENDPOINTS_DOKARKIV_URL": "http://dokarkiv.teamdokumenthandtering.svc.nais.local/rest/journalpostapi/v1",
+  "SKANMOTHELSE_ENDPOINTS_DOKARKIV_SCOPE": "api://dev-fss.teamdokumenthandtering.dokarkiv/.default",
   "SKANMOTHELSE_STSURL": "https://security-token-service.nais.preprod.local/rest/v1/sts/token",
   "SKANMOTHELSE_HELSE_SCHEDULE": "0+*/5+*+*+*+*",
   "SKANMOTHELSE_VAULT_BACKEND": "kv/preprod/fss",

@@ -7,10 +7,10 @@ metadata:
     team: teamdokumenthandtering
 spec:
   env:
-    - name: SKANMOTHELSE_DOKARKIVJOURNALPOSTURL
-      value: {{ SKANMOTHELSE_DOKARKIVJOURNALPOSTURL }}
-    - name: SKANMOTHELSE_STSURL
-      value: {{ SKANMOTHELSE_STSURL }}
+    - name: SKANMOTHELSE_ENDPOINTS_DOKARKIV_URL
+      value: {{ SKANMOTHELSE_ENDPOINTS_DOKARKIV_URL }}
+    - name: SKANMOTHELSE_ENDPOINTS_DOKARKIV_SCOPE
+      value: {{ SKANMOTHELSE_ENDPOINTS_DOKARKIV_SCOPE }}
     - name: SKANMOTHELSE_HELSE_SCHEDULE
       value: {{ SKANMOTHELSE_HELSE_SCHEDULE }}
     - name: SKANMOTHELSE_HELSE_SCHEDULE
@@ -60,3 +60,7 @@ spec:
         mountPath: /var/run/secrets/nais.io/srvskanmothelse
       - kvPath: {{ SFTP_KEYS }}
         mountPath: /var/run/secrets/nais.io/keys
+  azure:
+    application:
+      enabled: true
+  webproxy: true

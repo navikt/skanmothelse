@@ -1,4 +1,4 @@
-package no.nav.skanmothelse.config;
+package no.nav.skanmothelse;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

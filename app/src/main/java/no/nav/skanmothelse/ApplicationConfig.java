@@ -1,6 +1,7 @@
 package no.nav.skanmothelse;
 
 import io.micrometer.core.instrument.MeterRegistry;
+import no.nav.skanmothelse.azure.AzureProperties;
 import no.nav.skanmothelse.config.properties.SkanmothelseProperties;
 import no.nav.skanmothelse.config.properties.SkanmothelseVaultProperties;
 import no.nav.skanmothelse.metrics.DokTimedAspect;
@@ -17,7 +18,8 @@ import org.springframework.retry.annotation.EnableRetry;
 @EnableAspectJAutoProxy
 @EnableConfigurationProperties({
         SkanmothelseProperties.class,
-        SkanmothelseVaultProperties.class
+        SkanmothelseVaultProperties.class,
+        AzureProperties.class
 })
 @EnableRetry
 @Configuration
@@ -27,5 +29,4 @@ public class ApplicationConfig {
     public DokTimedAspect timedAspect(MeterRegistry registry) {
         return new DokTimedAspect(registry);
     }
-
 }
