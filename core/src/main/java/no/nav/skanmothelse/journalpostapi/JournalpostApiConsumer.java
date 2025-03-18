@@ -29,11 +29,11 @@ import static org.springframework.security.oauth2.client.web.reactive.function.c
 
 @Slf4j
 @Component
-public class OpprettJournalpostConsumer {
+public class JournalpostApiConsumer {
 
 	private final WebClient webClient;
 
-	public OpprettJournalpostConsumer(
+	public JournalpostApiConsumer(
 			SkanmothelseProperties skanmothelseProperties,
 			WebClient webClient,
 			CodecProperties codecProperties) {
@@ -78,9 +78,9 @@ public class OpprettJournalpostConsumer {
 		if (error instanceof WebClientResponseException webException && webException.getStatusCode().is4xxClientError()) {
 			if (webException instanceof WebClientResponseException.Conflict conflict) {
 				OpprettJournalpostResponse journalpost = conflict.getResponseBodyAs(OpprettJournalpostResponse.class);
-				log.info("Det eksisterer allerede en journalpost i dokarkiv med fil={}. Denne har journalpostId={}. Oppretter ikke ny journalpost.",
+				log.info("Det eksisterer allerede en journalpost i dokarkiv med fil=%s. Denne har journalpostId=%s. Oppretter ikke ny journalpost.",
 						eksternReferanseId, journalpost.journalpostId());
-				return new SkanmothelseFunctionalException(format("Det eksisterer allerede en journalpost i dokarkiv med eksternReferanseId={}, journalpostId={}. Feilmelding=%s",
+				return new SkanmothelseFunctionalException(format("Det eksisterer allerede en journalpost i dokarkiv med eksternReferanseId=%s, journalpostId=%s. Feilmelding=%s",
 						eksternReferanseId, journalpost.journalpostId(), webException.getMessage()), webException);
 			}
 			return new SkanmothelseFunctionalException(format("opprettJournalpost feilet funksjonelt med statusKode=%s. Feilmelding=%s", webException

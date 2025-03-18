@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.skanmothelse.azure.AzureOAuthEnabledWebClientConfig;
 import no.nav.skanmothelse.azure.AzureProperties;
 import no.nav.skanmothelse.config.properties.SkanmothelseProperties;
-import no.nav.skanmothelse.journalpostapi.OpprettJournalpostConsumer;
+import no.nav.skanmothelse.journalpostapi.JournalpostApiConsumer;
 import no.nav.skanmothelse.metrics.DokCounter;
 import org.apache.camel.CamelContext;
 import org.apache.camel.spring.boot.CamelContextConfiguration;
@@ -33,7 +33,7 @@ import static java.util.Collections.singletonList;
 @Configuration
 @EnableAutoConfiguration
 @EnableConfigurationProperties({SkanmothelseProperties.class, AzureProperties.class})
-@Import({OpprettJournalpostConsumer.class, AzureOAuthEnabledWebClientConfig.class, HelseTestConfig.SshdSftpServerConfig.class,
+@Import({JournalpostApiConsumer.class, AzureOAuthEnabledWebClientConfig.class, HelseTestConfig.SshdSftpServerConfig.class,
 		HelseTestConfig.CamelTestStartupConfig.class, HelseConfig.class, DokCounter.class})
 public class HelseTestConfig {
 

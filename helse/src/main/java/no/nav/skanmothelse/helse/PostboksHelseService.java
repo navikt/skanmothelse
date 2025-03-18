@@ -1,7 +1,7 @@
 package no.nav.skanmothelse.helse;
 
 import lombok.extern.slf4j.Slf4j;
-import no.nav.skanmothelse.journalpostapi.OpprettJournalpostConsumer;
+import no.nav.skanmothelse.journalpostapi.JournalpostApiConsumer;
 import no.nav.skanmothelse.journalpostapi.data.OpprettJournalpostRequest;
 import no.nav.skanmothelse.journalpostapi.data.OpprettJournalpostResponse;
 import org.apache.camel.Body;
@@ -14,13 +14,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class PostboksHelseService {
 	private final OpprettJournalpostPostboksHelseRequestMapper mapper;
-	private final OpprettJournalpostConsumer opprettJournalpostConsumer;
+	private final JournalpostApiConsumer journalpostApiConsumer;
 
 	@Autowired
 	public PostboksHelseService(OpprettJournalpostPostboksHelseRequestMapper mapper,
-								OpprettJournalpostConsumer opprettJournalpostConsumer) {
+								JournalpostApiConsumer journalpostApiConsumer) {
 		this.mapper = mapper;
-		this.opprettJournalpostConsumer = opprettJournalpostConsumer;
+		this.journalpostApiConsumer = journalpostApiConsumer;
 	}
 
 	@Handler
@@ -29,7 +29,7 @@ public class PostboksHelseService {
 			log.info("Skanmothelse mangler OCR fil. Fortsetter journalføring. fil=" + envelope.getFilebasename() + ", batch=" + envelope.getSkanningmetadata().getJournalpost().getBatchnavn());
 		}
 		OpprettJournalpostRequest request = mapper.mapRequest(envelope);
-		final OpprettJournalpostResponse opprettJournalpostResponse = opprettJournalpostConsumer.opprettJournalpost(request);
+		final OpprettJournalpostResponse opprettJournalpostResponse = journalpostApiConsumer.opprettJournalpost(request);
 		return opprettJournalpostResponse.journalpostId();
 	}
 }
