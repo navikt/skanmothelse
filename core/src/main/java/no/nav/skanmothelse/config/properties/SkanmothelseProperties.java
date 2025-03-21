@@ -17,8 +17,10 @@ public class SkanmothelseProperties {
 	private final ServiceUserProperties serviceuser = new ServiceUserProperties();
 	private final FilomraadeProperties filomraade = new FilomraadeProperties();
 	private final Helse helse = new Helse();
+	private final Avstem avstem = new Avstem();
 	private final SftpProperties sftp = new SftpProperties();
 	private final Endpoints endpoints = new Endpoints();
+	private final JiraConfigProperties jira = new JiraConfigProperties();
 
 	@Data
 	@Validated
@@ -40,6 +42,9 @@ public class SkanmothelseProperties {
 
 		@NotEmpty
 		private String feilmappe;
+
+		@NotEmpty
+		private String avstemmappe;
 	}
 
 	@Data
@@ -59,6 +64,15 @@ public class SkanmothelseProperties {
 
 		@NotNull
 		private final FilomraadeProperties filomraade = new FilomraadeProperties();
+	}
+
+	@Data
+	@Validated
+	public static class Avstem {
+		@NotEmpty
+		private String schedule;
+
+		private boolean startup;
 	}
 
 	@Data
@@ -105,6 +119,19 @@ public class SkanmothelseProperties {
 		 */
 		@NotEmpty
 		private String scope;
+	}
+
+	@Data
+	@Validated
+	public static class JiraConfigProperties {
+		@NotEmpty
+		private String username;
+
+		@NotEmpty
+		private String password;
+
+		@NotEmpty
+		private String url;
 	}
 
 }
