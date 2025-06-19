@@ -21,6 +21,7 @@ public class SkanmothelseProperties {
 	private final SftpProperties sftp = new SftpProperties();
 	private final Endpoints endpoints = new Endpoints();
 	private final JiraConfigProperties jira = new JiraConfigProperties();
+	private final SlackProperties slack = new SlackProperties();
 
 	@Data
 	@Validated
@@ -134,6 +135,15 @@ public class SkanmothelseProperties {
 		private String url;
 	}
 
+	@Data
+	@Validated
+	public static class SlackProperties {
+		@NotEmpty
+		@ToString.Exclude
+		private String token;
+		@NotEmpty
+		private String channel;
+		private boolean enabled;
+	}
+
 }
-
-

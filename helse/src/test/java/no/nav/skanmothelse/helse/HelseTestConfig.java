@@ -1,11 +1,13 @@
 package no.nav.skanmothelse.helse;
 
+import com.slack.api.Slack;
+import com.slack.api.methods.MethodsClient;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.skanmothelse.CoreConfig;
 import no.nav.skanmothelse.azure.AzureOAuthEnabledWebClientConfig;
 import no.nav.skanmothelse.azure.AzureProperties;
 import no.nav.skanmothelse.config.properties.SkanmothelseProperties;
 import no.nav.skanmothelse.journalpostapi.JournalpostApiConsumer;
-import no.nav.skanmothelse.metrics.DokCounter;
 import org.apache.camel.CamelContext;
 import org.apache.camel.spring.boot.CamelContextConfiguration;
 import org.apache.sshd.common.file.virtualfs.VirtualFileSystemFactory;
@@ -15,11 +17,13 @@ import org.apache.sshd.server.SshServer;
 import org.apache.sshd.server.auth.UserAuthNoneFactory;
 import org.apache.sshd.server.auth.pubkey.AcceptAllPublickeyAuthenticator;
 import org.apache.sshd.sftp.server.SftpSubsystemFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,9 +37,24 @@ import static java.util.Collections.singletonList;
 @Configuration
 @EnableAutoConfiguration
 @EnableConfigurationProperties({SkanmothelseProperties.class, AzureProperties.class})
-@Import({JournalpostApiConsumer.class, AzureOAuthEnabledWebClientConfig.class, HelseTestConfig.SshdSftpServerConfig.class,
-		HelseTestConfig.CamelTestStartupConfig.class, HelseConfig.class, DokCounter.class})
+@Import({JournalpostApiConsumer.class,
+		AzureOAuthEnabledWebClientConfig.class,
+		HelseTestConfig.SshdSftpServerConfig.class,
+		HelseTestConfig.CamelTestStartupConfig.class,
+		CoreConfig.class
+})
 public class HelseTestConfig {
+
+	@Value("${skanmothelse.slack.url}")
+	private String slackUrl;
+
+	@Bean
+	@Primary
+	MethodsClient slackClient(SkanmothelseProperties skanmothelseProperties) {
+		var slackClient = Slack.getInstance().methods(skanmothelseProperties.getSlack().getToken());
+		slackClient.setEndpointUrlPrefix(slackUrl);
+		return slackClient;
+	}
 
 	@Configuration
 	static class CamelTestStartupConfig {
