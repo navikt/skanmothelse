@@ -12,13 +12,13 @@ import no.nav.skanmothelse.helse.PostboksHelseSkanningAggregator;
 import no.nav.skanmothelse.helse.SkanningmetadataCounter;
 import no.nav.skanmothelse.helse.SkanningmetadataUnmarshaller;
 import no.nav.skanmothelse.metrics.DokCounter;
+import no.nav.skanmothelse.slack.SlackService;
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.builder.ValueBuilder;
 import org.apache.camel.dataformat.zipfile.ZipSplitter;
 import org.bouncycastle.openpgp.PGPException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -34,6 +34,10 @@ import static org.apache.camel.LoggingLevel.WARN;
 @Slf4j
 @Component
 public class PostboksHelseRoutePGPEncrypted extends RouteBuilder {
+
+	private static final String PGP_AVVIK = "direct:pgp_encrypted_avvik_helse";
+	private static final String PROCESS_PGP_ENCRYPTED = "direct:pgp_encrypted_process_helse";
+	private static final String SEND_SLACKMELDING_RUTE = "direct:sendSlackmelding";
 	public static final String PROPERTY_FORSENDELSE_ZIPNAME = "ForsendelseZipname";
 	public static final String PROPERTY_FORSENDELSE_BATCHNAVN = "ForsendelseBatchNavn";
 	public static final String PROPERTY_FORSENDELSE_FILEBASENAME = "ForsendelseFileBasename";
@@ -43,22 +47,21 @@ public class PostboksHelseRoutePGPEncrypted extends RouteBuilder {
 	private final SkanmothelseProperties skanmothelseProperties;
 	private final PostboksHelseService postboksHelseService;
 	private final PgpDecryptService pgpDecryptService;
+	private final SlackService slackService;
 
-	@Autowired
 	public PostboksHelseRoutePGPEncrypted(
 			SkanmothelseProperties skanmothelseProperties,
 			PostboksHelseService postboksHelseService,
-			PgpDecryptService pgpDecryptService) {
+			PgpDecryptService pgpDecryptService,
+			SlackService slackService) {
 		this.skanmothelseProperties = skanmothelseProperties;
 		this.postboksHelseService = postboksHelseService;
 		this.pgpDecryptService = pgpDecryptService;
+		this.slackService = slackService;
 	}
 
 	@Override
 	public void configure() {
-		String PGP_AVVIK = "direct:pgp_encrypted_avvik_helse";
-		String PROCESS_PGP_ENCRYPTED = "direct:pgp_encrypted_process_helse";
-
 		// @formatter:off
 		onException(Exception.class)
 				.handled(true)
@@ -67,7 +70,9 @@ public class PostboksHelseRoutePGPEncrypted extends RouteBuilder {
 				.log(ERROR, log, "Skanmothelse-pgp feilet teknisk for " + KEY_LOGGING_INFO + ". ${exception}")
 				.setHeader(FILE_NAME, simple("${exchangeProperty." + PROPERTY_FORSENDELSE_BATCHNAVN + "}/${exchangeProperty." + PROPERTY_FORSENDELSE_FILEBASENAME + "}-teknisk.zip"))
 				.to(PGP_AVVIK)
-				.log(ERROR, log, "Skanmothelse-pgp skrev feiletzip=${header." + FILE_NAME_PRODUCED + "} til feilmappe. " + KEY_LOGGING_INFO + ".");
+				.log(ERROR, log, "Skanmothelse-pgp skrev feiletzip=${header." + FILE_NAME_PRODUCED + "} til feilmappe. " + KEY_LOGGING_INFO + ".")
+				.setBody(simple("Innlesing av fil feilet teknisk med exception=${exception.getClass().getName()}."))
+				.to(SEND_SLACKMELDING_RUTE);
 
 		// Får ikke dekryptert .zip.pgp - mest sannsynlig mismatch mellom private key og public key
 		onException(PGPException.class)
@@ -80,7 +85,9 @@ public class PostboksHelseRoutePGPEncrypted extends RouteBuilder {
 						"?{{skanmothelse.helse.endpointconfig}}")
 				.log(ERROR, log, "Skanmothelse-pgp skrev feiletzip=${header." + FILE_NAME_PRODUCED + "} til feilmappe. " + KEY_LOGGING_INFO + ".")
 				.end()
-				.process(new MdcRemoverProcessor());
+				.process(new MdcRemoverProcessor())
+				.setBody(simple("Innlesing av fil feilet dekryptering med exception=${exception.getClass().getName()}."))
+				.to(SEND_SLACKMELDING_RUTE);
 
 		// Kjente funksjonelle feil
 		onException(AbstractSkanmothelseFunctionalException.class)
@@ -90,7 +97,12 @@ public class PostboksHelseRoutePGPEncrypted extends RouteBuilder {
 				.log(WARN, log, "Skanmothelse-pgp feilet funksjonelt for " + KEY_LOGGING_INFO + ". ${exception}")
 				.setHeader(FILE_NAME, simple("${exchangeProperty." + PROPERTY_FORSENDELSE_BATCHNAVN + "}/${exchangeProperty." + PROPERTY_FORSENDELSE_FILEBASENAME + "}.zip"))
 				.to(PGP_AVVIK)
-				.log(WARN, log, "Skanmothelse-pgp skrev feiletzip=${header." + FILE_NAME_PRODUCED + "} til feilmappe. " + KEY_LOGGING_INFO + ".");
+				.log(WARN, log, "Skanmothelse-pgp skrev feiletzip=${header." + FILE_NAME_PRODUCED + "} til feilmappe. " + KEY_LOGGING_INFO + ".")
+				.setBody(simple("Innlesing av fil feilet funksjonelt med exception=${exception.getClass().getName()}."))
+				.to(SEND_SLACKMELDING_RUTE);
+
+		from(SEND_SLACKMELDING_RUTE)
+				.bean(slackService, "sendMelding(${body})");
 
 		from("{{skanmothelse.helse.endpointuri}}/{{skanmothelse.helse.filomraade.inngaaendemappe}}" +
 				"?{{skanmothelse.helse.endpointconfig}}" +

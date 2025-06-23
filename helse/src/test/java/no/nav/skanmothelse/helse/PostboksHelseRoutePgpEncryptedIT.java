@@ -13,9 +13,11 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.List;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.containing;
 import static com.github.tomakehurst.wiremock.client.WireMock.exactly;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class PostboksHelseRoutePgpEncryptedIT extends AbstractIt {
+
 	private static final String INNGAAENDE = "inngaaende";
 	private static final String FEILMAPPE = "feilmappe";
 
@@ -33,6 +36,8 @@ public class PostboksHelseRoutePgpEncryptedIT extends AbstractIt {
 	@BeforeEach
 	void beforeEach() {
 		super.setUpStubs();
+		super.stubSlack();
+
 		final Path inngaaende = sshdPath.resolve(INNGAAENDE);
 		final Path processed = inngaaende.resolve("processed");
 		final Path feilmappe = sshdPath.resolve(FEILMAPPE);
@@ -70,6 +75,12 @@ public class PostboksHelseRoutePgpEncryptedIT extends AbstractIt {
 				assertThat(Files.list(sshdPath.resolve(FEILMAPPE).resolve(BATCHNAME))
 						.toList())
 						.hasSize(3);
+
+				verify(exactly(2), postRequestedFor(urlMatching(URL_DOKARKIV_JOURNALPOST_GEN)));
+				verify(exactly(1), postRequestedFor(urlPathEqualTo(SLACK_POST_MESSAGE_PATH))
+						.withRequestBody(containing("no.nav.skanmothelse.exceptions.functional.SkanningmetadataValidationException")));
+				verify(exactly(2), postRequestedFor(urlPathEqualTo(SLACK_POST_MESSAGE_PATH))
+						.withRequestBody(containing("no.nav.skanmothelse.exceptions.functional.ForsendelseNotCompleteException")));
 			} catch (NoSuchFileException e) {
 				fail();
 			}
@@ -82,7 +93,6 @@ public class PostboksHelseRoutePgpEncryptedIT extends AbstractIt {
 				"BHELSE-20200529-4-3x.zip",
 				"BHELSE-20200529-4-4x.zip",
 				"BHELSE-20200529-4-5x.zip");
-		verify(exactly(2), postRequestedFor(urlMatching(URL_DOKARKIV_JOURNALPOST_GEN)));
 	}
 
 	@Test
@@ -102,6 +112,12 @@ public class PostboksHelseRoutePgpEncryptedIT extends AbstractIt {
 				assertThat(Files.list(sshdPath.resolve(FEILMAPPE).resolve(BATCHNAME))
 						.toList())
 						.hasSize(3);
+
+				verify(exactly(2), postRequestedFor(urlMatching(URL_DOKARKIV_JOURNALPOST_GEN)));
+				verify(exactly(1), postRequestedFor(urlPathEqualTo(SLACK_POST_MESSAGE_PATH))
+						.withRequestBody(containing("no.nav.skanmothelse.exceptions.functional.SkanningmetadataValidationException")));
+				verify(exactly(2), postRequestedFor(urlPathEqualTo(SLACK_POST_MESSAGE_PATH))
+						.withRequestBody(containing("no.nav.skanmothelse.exceptions.functional.ForsendelseNotCompleteException")));
 			} catch (NoSuchFileException e) {
 				fail();
 			}
@@ -114,7 +130,6 @@ public class PostboksHelseRoutePgpEncryptedIT extends AbstractIt {
 				"BHELSE.20200529-4-3x.zip",
 				"BHELSE.20200529-4-4x.zip",
 				"BHELSE.20200529-4-5x.zip");
-		verify(exactly(2), postRequestedFor(urlMatching(URL_DOKARKIV_JOURNALPOST_GEN)));
 	}
 
 	@Test
@@ -129,6 +144,8 @@ public class PostboksHelseRoutePgpEncryptedIT extends AbstractIt {
 
 		await().atMost(15, SECONDS).untilAsserted(() -> {
 			assertTrue(Files.exists(sshdPath.resolve(FEILMAPPE).resolve(ZIP_FILE_NAME_NO_EXTENSION + ".zip.pgp")));
+			verify(exactly(1), postRequestedFor(urlPathEqualTo(SLACK_POST_MESSAGE_PATH))
+					.withRequestBody(containing("org.bouncycastle.openpgp.PGPException")));
 		});
 	}
 
