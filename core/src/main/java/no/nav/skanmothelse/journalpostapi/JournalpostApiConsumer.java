@@ -9,7 +9,7 @@ import no.nav.skanmothelse.journalpostapi.data.FeilendeAvstemmingReferanser;
 import no.nav.skanmothelse.journalpostapi.data.OpprettJournalpostRequest;
 import no.nav.skanmothelse.journalpostapi.data.OpprettJournalpostResponse;
 import org.slf4j.MDC;
-import org.springframework.boot.autoconfigure.codec.CodecProperties;
+import org.springframework.boot.autoconfigure.http.codec.HttpCodecsProperties;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
@@ -36,13 +36,13 @@ public class JournalpostApiConsumer {
 	public JournalpostApiConsumer(
 			SkanmothelseProperties skanmothelseProperties,
 			WebClient webClient,
-			CodecProperties codecProperties) {
+			HttpCodecsProperties httpCodecsProperties) {
 		this.webClient = webClient.mutate()
 				.baseUrl(skanmothelseProperties.getEndpoints().getDokarkiv().getUrl())
 				.defaultHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
 				.exchangeStrategies(ExchangeStrategies.builder()
 						.codecs(configurer -> configurer.defaultCodecs()
-								.maxInMemorySize((int) codecProperties.getMaxInMemorySize().toBytes()))
+								.maxInMemorySize((int) httpCodecsProperties.getMaxInMemorySize().toBytes()))
 						.build())
 				.build();
 	}
