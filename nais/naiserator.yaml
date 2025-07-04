@@ -51,9 +51,9 @@ spec:
     max: 1
   resources:
     limits:
-      cpu: 2000m
       memory: 3584Mi
     requests:
+      cpu: 10m
       memory: 2560Mi
   vault:
     enabled: true
@@ -70,3 +70,8 @@ spec:
   webproxy: true
   envFrom:
     - secret: slack-alerts
+  observability:
+    logging:
+      destinations:
+        - id: elastic
+        - id: loki
