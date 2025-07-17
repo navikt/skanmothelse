@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.skanmothelse.azure.AzureOAuthEnabledWebClientConfig;
 import no.nav.skanmothelse.azure.AzureProperties;
 import no.nav.skanmothelse.config.properties.SkanmothelseProperties;
-import no.nav.skanmothelse.config.properties.SkanmothelseVaultProperties;
 import no.nav.skanmothelse.metrics.DokCounter;
 import org.apache.camel.CamelContext;
 import org.apache.camel.spring.boot.CamelContextConfiguration;
@@ -38,7 +37,6 @@ import static java.util.Collections.singletonList;
 @EnableConfigurationProperties({
 		SkanmothelseProperties.class,
 		AzureProperties.class,
-		SkanmothelseVaultProperties.class
 })
 @Import({
 		CoreConfig.class,
