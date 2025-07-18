@@ -22,6 +22,7 @@ public class SkanmothelseProperties {
 	private final Endpoints endpoints = new Endpoints();
 	private final JiraConfigProperties jira = new JiraConfigProperties();
 	private final SlackProperties slack = new SlackProperties();
+	private final Pgp pgp = new Pgp();
 
 	@Data
 	@Validated
@@ -146,4 +147,20 @@ public class SkanmothelseProperties {
 		private boolean enabled;
 	}
 
+	@Data
+	@Validated
+	public static class Pgp {
+		/**
+		 * passphrase for PGP-tjeneste
+		 */
+		@NotEmpty
+		@ToString.Exclude
+		private String passphrase;
+
+		/**
+		 * path to PGP privateKey
+		 */
+		@NotEmpty
+		private String privatekeyPath;
+	}
 }

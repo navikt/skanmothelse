@@ -1,13 +1,9 @@
 {
-  "SRVSKANMOTHELSE": "/serviceuser/data/dev/srvskanmothelse",
-  "SRVJIRADOKDISTAVSTEMMING": "/serviceuser/data/dev/srvjiradokdistavstemming",
-  "SFTP_KEYS": "kv/preprod/fss/skanmothelse/keys",
   "SKANMOTHELSE_ENDPOINTS_DOKARKIV_URL": "http://dokarkiv.teamdokumenthandtering.svc.nais.local/rest/journalpostapi/v1",
   "SKANMOTHELSE_ENDPOINTS_DOKARKIV_SCOPE": "api://dev-fss.teamdokumenthandtering.dokarkiv/.default",
   "SKANMOTHELSE_JIRA_URL": "https://jira-q1.adeo.no",
   "SKANMOTHELSE_HELSE_SCHEDULE": "0+*/5+*+*+*+*",
-  "SKANMOTHELSE_VAULT_BACKEND": "kv/preprod/fss",
-  "SKANMOTHELSE_VAULT_KUBERNETESPATH": "kubernetes/preprod/fss",
+  "SKANMOTHELSE_SECRET": "skanmothelse-q2",
   "INGRESSES": [
     "https://skanmothelse.dev.intern.nav.no"
   ]

@@ -11,20 +11,12 @@ spec:
       value: {{ SKANMOTHELSE_ENDPOINTS_DOKARKIV_URL }}
     - name: SKANMOTHELSE_ENDPOINTS_DOKARKIV_SCOPE
       value: {{ SKANMOTHELSE_ENDPOINTS_DOKARKIV_SCOPE }}
-    - name: SKANMOTHELSE_HELSE_SCHEDULE
-      value: {{ SKANMOTHELSE_HELSE_SCHEDULE }}
-    - name: SKANMOTHELSE_HELSE_SCHEDULE
-      value: {{ SKANMOTHELSE_HELSE_SCHEDULE }}
     - name: SKANMOTHELSE_SFTP_PRIVATEKEY
-      value: /var/run/secrets/nais.io/keys/privatekey
+      value: /var/run/secrets/nais.io/skanmothelse/sftp/sftpprivatekey
     - name: SKANMOTHELSE_SFTP_HOSTKEY
-      value: /var/run/secrets/nais.io/keys/hostkey
-    - name: SKANMOTHELSE_PGP_PRIVATEKEY
-      value: /var/run/secrets/nais.io/keys/pgpprivatekey
-    - name: SKANMOTHELSE_VAULT_BACKEND
-      value: {{ SKANMOTHELSE_VAULT_BACKEND }}
-    - name: SKANMOTHELSE_VAULT_KUBERNETESPATH
-      value: {{ SKANMOTHELSE_VAULT_KUBERNETESPATH }}
+      value: /var/run/secrets/nais.io/skanmothelse/sftp/hostkey
+    - name: SKANMOTHELSE_PGP_PRIVATEKEY_PATH
+      value: /var/run/secrets/nais.io/skanmothelse/pgp/pgpprivatekey
     - name: SKANMOTHELSE_JIRA_URL
       value: {{ SKANMOTHELSE_JIRA_URL }}
   image: {{ image }}
@@ -55,21 +47,19 @@ spec:
     requests:
       cpu: 10m
       memory: 2560Mi
-  vault:
-    enabled: true
-    paths:
-      - kvPath: {{ SRVSKANMOTHELSE }}
-        mountPath: /var/run/secrets/nais.io/srvskanmothelse
-      - kvPath: {{ SFTP_KEYS }}
-        mountPath: /var/run/secrets/nais.io/keys
-      - kvPath: {{ SRVJIRADOKDISTAVSTEMMING }}
-        mountPath: /var/run/secrets/nais.io/srvjiradokdistavstemming
   azure:
     application:
       enabled: true
   webproxy: true
+  filesFrom:
+    - mountPath: /var/run/secrets/nais.io/skanmothelse/pgp
+      secret: skanmot-pgp-keys
+    - mountPath: /var/run/secrets/nais.io/skanmothelse/sftp
+      secret: skanmot-sftp-keys
   envFrom:
+    - secret: {{ SKANMOTHELSE_SECRET }}
     - secret: slack-alerts
+    - secret: jira-service-user
   observability:
     logging:
       destinations:
