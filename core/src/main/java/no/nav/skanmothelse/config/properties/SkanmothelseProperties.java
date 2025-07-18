@@ -158,9 +158,9 @@ public class SkanmothelseProperties {
 		private String passphrase;
 
 		/**
-		 * privateKey for PGP-tjeneste
+		 * path to PGP privateKey
 		 */
 		@NotEmpty
-		private String privateKey;
+		private String privatekeyPath;
 	}
 }

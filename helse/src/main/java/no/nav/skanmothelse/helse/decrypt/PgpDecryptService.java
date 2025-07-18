@@ -43,7 +43,7 @@ public class PgpDecryptService {
 	public PgpDecryptService(SkanmothelseProperties skanmothelseProperties) throws IOException, PGPException {
 		this.pgp = skanmothelseProperties.getPgp();
 		pgpKeyRing = new PGPSecretKeyRingCollection(
-				getDecoderStream(new BufferedInputStream(new FileInputStream(pgp.getPrivateKey()))),
+				getDecoderStream(new BufferedInputStream(new FileInputStream(pgp.getPrivatekeyPath()))),
 				new JcaKeyFingerprintCalculator()
 		);
 

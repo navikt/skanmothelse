@@ -15,7 +15,7 @@ spec:
       value: /var/run/secrets/nais.io/skanmothelse/sftp/sftpprivatekey
     - name: SKANMOTHELSE_SFTP_HOSTKEY
       value: /var/run/secrets/nais.io/skanmothelse/sftp/hostkey
-    - name: SKANMOTHELSE_PGP_PRIVATEKEY
+    - name: SKANMOTHELSE_PGP_PRIVATEKEY_PATH
       value: /var/run/secrets/nais.io/skanmothelse/pgp/pgpprivatekey
     - name: SKANMOTHELSE_JIRA_URL
       value: {{ SKANMOTHELSE_JIRA_URL }}
