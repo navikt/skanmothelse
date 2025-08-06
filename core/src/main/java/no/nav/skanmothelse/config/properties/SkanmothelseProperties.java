@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.ToString;
+import no.nav.dok.validators.Exists;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
@@ -84,12 +85,12 @@ public class SkanmothelseProperties {
 		@NotEmpty
 		private String host;
 
-		@ToString.Exclude
 		@NotEmpty
+		@Exists
 		private String privateKey;
 
-		@ToString.Exclude
 		@NotEmpty
+		@Exists
 		private String hostKey;
 
 		@ToString.Exclude
@@ -161,6 +162,7 @@ public class SkanmothelseProperties {
 		 * path to PGP privateKey
 		 */
 		@NotEmpty
+		@Exists
 		private String privatekeyPath;
 	}
 }
