@@ -1,5 +1,6 @@
 package no.nav.skanmothelse.config.properties;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -15,14 +16,22 @@ import java.time.Duration;
 @ConfigurationProperties("skanmothelse")
 public class SkanmothelseProperties {
 
+	@Valid
 	private final ServiceUserProperties serviceuser = new ServiceUserProperties();
 	private final FilomraadeProperties filomraade = new FilomraadeProperties();
+	@Valid
 	private final Helse helse = new Helse();
+	@Valid
 	private final Avstem avstem = new Avstem();
+	@Valid
 	private final SftpProperties sftp = new SftpProperties();
+	@Valid
 	private final Endpoints endpoints = new Endpoints();
+	@Valid
 	private final JiraConfigProperties jira = new JiraConfigProperties();
+	@Valid
 	private final SlackProperties slack = new SlackProperties();
+	@Valid
 	private final Pgp pgp = new Pgp();
 
 	@Data
