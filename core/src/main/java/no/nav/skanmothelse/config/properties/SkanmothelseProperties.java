@@ -16,8 +16,6 @@ import java.time.Duration;
 @ConfigurationProperties("skanmothelse")
 public class SkanmothelseProperties {
 
-	@Valid
-	private final ServiceUserProperties serviceuser = new ServiceUserProperties();
 	private final FilomraadeProperties filomraade = new FilomraadeProperties();
 	@Valid
 	private final Helse helse = new Helse();
@@ -33,18 +31,6 @@ public class SkanmothelseProperties {
 	private final SlackProperties slack = new SlackProperties();
 	@Valid
 	private final Pgp pgp = new Pgp();
-
-	@Data
-	@Validated
-	public static class ServiceUserProperties {
-		@ToString.Exclude
-		@NotEmpty
-		private String username;
-
-		@ToString.Exclude
-		@NotEmpty
-		private String password;
-	}
 
 	@Data
 	@Validated
