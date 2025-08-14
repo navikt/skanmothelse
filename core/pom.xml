@@ -59,6 +59,10 @@
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
         </dependency>
+		<dependency>
+			<groupId>no.nav.dok-common</groupId>
+			<artifactId>util</artifactId>
+		</dependency>
 
         <!-- Metrikker -->
         <dependency>

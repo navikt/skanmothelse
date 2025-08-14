@@ -1,9 +1,11 @@
 package no.nav.skanmothelse.config.properties;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.ToString;
+import no.nav.dok.validators.Exists;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
@@ -14,27 +16,21 @@ import java.time.Duration;
 @ConfigurationProperties("skanmothelse")
 public class SkanmothelseProperties {
 
-	private final ServiceUserProperties serviceuser = new ServiceUserProperties();
 	private final FilomraadeProperties filomraade = new FilomraadeProperties();
+	@Valid
 	private final Helse helse = new Helse();
+	@Valid
 	private final Avstem avstem = new Avstem();
+	@Valid
 	private final SftpProperties sftp = new SftpProperties();
+	@Valid
 	private final Endpoints endpoints = new Endpoints();
+	@Valid
 	private final JiraConfigProperties jira = new JiraConfigProperties();
+	@Valid
 	private final SlackProperties slack = new SlackProperties();
+	@Valid
 	private final Pgp pgp = new Pgp();
-
-	@Data
-	@Validated
-	public static class ServiceUserProperties {
-		@ToString.Exclude
-		@NotEmpty
-		private String username;
-
-		@ToString.Exclude
-		@NotEmpty
-		private String password;
-	}
 
 	@Data
 	@Validated
@@ -84,12 +80,12 @@ public class SkanmothelseProperties {
 		@NotEmpty
 		private String host;
 
-		@ToString.Exclude
 		@NotEmpty
+		@Exists
 		private String privateKey;
 
-		@ToString.Exclude
 		@NotEmpty
+		@Exists
 		private String hostKey;
 
 		@ToString.Exclude
@@ -161,6 +157,7 @@ public class SkanmothelseProperties {
 		 * path to PGP privateKey
 		 */
 		@NotEmpty
+		@Exists
 		private String privatekeyPath;
 	}
 }
