@@ -2,7 +2,9 @@ package no.nav.skanmothelse;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import no.nav.skanmothelse.azure.AzureProperties;
+import no.nav.skanmothelse.config.properties.JiraAuthProperties;
 import no.nav.skanmothelse.config.properties.SkanmothelseProperties;
+import no.nav.skanmothelse.config.properties.SlackProperties;
 import no.nav.skanmothelse.metrics.DokTimedAspect;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -17,6 +19,8 @@ import org.springframework.retry.annotation.EnableRetry;
 @EnableAspectJAutoProxy
 @EnableConfigurationProperties({
 		SkanmothelseProperties.class,
+		SlackProperties.class,
+		JiraAuthProperties.class,
 		AzureProperties.class
 })
 @EnableRetry
