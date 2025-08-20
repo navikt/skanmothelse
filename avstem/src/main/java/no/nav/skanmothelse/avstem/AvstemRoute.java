@@ -49,17 +49,17 @@ public class AvstemRoute extends RouteBuilder {
 		onException(Exception.class)
 				.handled(true)
 				.process(new MdcSetterProcessor())
-				.log(WARN, log, "Skanmothelse feilet teknisk, Exception:${exception}");
+				.log(WARN, log, "Feilet teknisk, Exception:${exception}");
 
 		onException(AbstractSkanmothelseFunctionalException.class, JiraClientException.class)
 				.handled(true)
 				.useOriginalMessage()
-				.log(WARN, log, "Skanmothelse feilet å prossessere avstemmingsfil. Exception:${exception};" );
+				.log(WARN, log, "Feilet å prossessere avstemmingsfil. Exception:${exception};" );
 
 		onException(GenericFileOperationFailedException.class)
 				.handled(true)
 				.process(new MdcSetterProcessor())
-				.log(ERROR, log, "Skanmothelse fant ikke avstemmingsfil for ${exchangeProperty." + EXCHANGE_AVSTEMT_DATO + "}. Undersøk tilfellet og evt. kontakt Iron Mountain. Exception:${exception}");
+				.log(ERROR, log, "Fant ikke avstemmingsfil for ${exchangeProperty." + EXCHANGE_AVSTEMT_DATO + "}. Undersøk tilfellet og evt. kontakt Iron Mountain. Exception:${exception}");
 
 
 		from("cron:tab?schedule={{skanmothelse.avstem.schedule}}")
@@ -69,7 +69,7 @@ public class AvstemRoute extends RouteBuilder {
 						"&move=processed", CONNECTION_TIMEOUT)
 				.routeId("avstem_routeid")
 				.autoStartup("{{skanmothelse.avstem.startup}}")
-				.log(INFO, log, "Skanmothelse starter cron jobb for å avstemme referanser...")
+				.log(INFO, log, "Starter cron jobb for å avstemme referanser...")
 				.process(new MdcSetterProcessor())
 				.choice()
 				.when(header(FILE_NAME).isNull())
@@ -86,7 +86,7 @@ public class AvstemRoute extends RouteBuilder {
 						}
 					})
 				.otherwise()
-					.log(INFO, log, "Skanmothelse starter behandling av avstemmingsfil=${file:name}.")
+					.log(INFO, log, "Starter behandling av avstemmingsfil=${file:name}.")
 					.process(exchange -> {
 						exchange.setProperty(EXCHANGE_AVSTEMMINGSFIL_NAVN, simple("${file:name}"));
 						exchange.setProperty(EXCHANGE_AVSTEMT_DATO,  parseDatoFraFilnavn(exchange));
@@ -106,7 +106,7 @@ public class AvstemRoute extends RouteBuilder {
 					.choice()
 						.when(simple("${body}").isNotNull())
 							.setProperty(ANTALL_FILER_FEILET, simple("${body.size}"))
-							.log(INFO, log, "Skanmothelse fant ${body.size} feilende avstemmingsreferanser")
+							.log(INFO, log, "Fant ${body.size} feilende avstemmingsreferanser")
 							.marshal().csv()
 							.bean(opprettJiraService)
 							.log(INFO, log, "Har opprettet Jira-sak=${body.jiraIssueKey} for feilende skanmothelse avstemmingsreferanser")
@@ -114,7 +114,7 @@ public class AvstemRoute extends RouteBuilder {
 					.endChoice()
 				.endChoice()
 				.end()
-				.log(INFO, log, "Skanmothelse behandlet ferdig avstemmingsfil: ${file:name}");
+				.log(INFO, log, "Behandlet ferdig avstemmingsfil: ${file:name}");
 		// @formatter:on
 	}
 }
