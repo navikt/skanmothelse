@@ -1,5 +1,6 @@
 package no.nav.skanmothelse.avstem;
 
+import no.nav.dok.jiraapi.JiraResponse;
 import no.nav.dok.jiracore.exception.JiraClientException;
 import no.nav.skanmothelse.MdcSetterProcessor;
 import no.nav.skanmothelse.RemoveMdcProcessor;
@@ -9,8 +10,11 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.file.GenericFileOperationFailedException;
 import org.springframework.stereotype.Component;
 
+import java.time.Clock;
+import java.time.LocalDate;
 import java.util.Set;
 
+import static no.nav.dok.validators.OffentligFridag.erOffentligFridag;
 import static no.nav.skanmothelse.jira.OpprettJiraService.ANTALL_FILER_AVSTEMT;
 import static no.nav.skanmothelse.jira.OpprettJiraService.ANTALL_FILER_FEILET;
 import static no.nav.skanmothelse.jira.OpprettJiraService.EXCHANGE_AVSTEMMINGSFIL_NAVN;
@@ -28,11 +32,14 @@ public class AvstemRoute extends RouteBuilder {
 	private static final int CONNECTION_TIMEOUT = 15000;
 	private final AvstemService avstemService;
 	private final OpprettJiraService opprettJiraService;
+	private final Clock clock;
 
 	public AvstemRoute(AvstemService avstemService,
-					   OpprettJiraService opprettJiraService) {
+					   OpprettJiraService opprettJiraService,
+					   Clock clock) {
 		this.avstemService = avstemService;
 		this.opprettJiraService = opprettJiraService;
+		this.clock = clock;
 	}
 
 	@Override
@@ -42,17 +49,17 @@ public class AvstemRoute extends RouteBuilder {
 		onException(Exception.class)
 				.handled(true)
 				.process(new MdcSetterProcessor())
-				.log(WARN, log, "Skanmothelse feilet teknisk, Exception:${exception}");
+				.log(WARN, log, "Feilet teknisk, Exception:${exception}");
 
 		onException(AbstractSkanmothelseFunctionalException.class, JiraClientException.class)
 				.handled(true)
 				.useOriginalMessage()
-				.log(WARN, log, "Skanmothelse feilet å prossessere avstemmingsfil. Exception:${exception};" );
+				.log(WARN, log, "Feilet å prossessere avstemmingsfil. Exception:${exception};" );
 
 		onException(GenericFileOperationFailedException.class)
 				.handled(true)
 				.process(new MdcSetterProcessor())
-				.log(ERROR, log, "Skanmothelse fant ikke avstemmingsfil for ${exchangeProperty." + EXCHANGE_AVSTEMT_DATO + "}. Undersøk tilfellet og evt. kontakt Iron Mountain. Exception:${exception}");
+				.log(ERROR, log, "Fant ikke avstemmingsfil for ${exchangeProperty." + EXCHANGE_AVSTEMT_DATO + "}. Undersøk tilfellet og evt. kontakt Iron Mountain. Exception:${exception}");
 
 
 		from("cron:tab?schedule={{skanmothelse.avstem.schedule}}")
@@ -62,16 +69,24 @@ public class AvstemRoute extends RouteBuilder {
 						"&move=processed", CONNECTION_TIMEOUT)
 				.routeId("avstem_routeid")
 				.autoStartup("{{skanmothelse.avstem.startup}}")
-				.log(INFO, log, "Skanmothelse starter cron jobb for å avstemme referanser...")
+				.log(INFO, log, "Starter cron jobb for å avstemme referanser...")
 				.process(new MdcSetterProcessor())
 				.choice()
-					.when(header(FILE_NAME).isNull())
-						.process(exchange -> exchange.setProperty(EXCHANGE_AVSTEMT_DATO, finnForrigeVirkedag()))
-						.log(ERROR, log, "Skanmothelse fant ikke avstemmingsfil for ${exchangeProperty." + EXCHANGE_AVSTEMT_DATO + "}. Undersøk tilfellet og evt. ser opprettet Jira-sak.")
-						.bean(opprettJiraService)
-						.log(INFO, log, "Skanmothelse opprettet jira-sak med key=${body.jiraIssueKey} for manglende avstemmingsfil.")
+				.when(header(FILE_NAME).isNull())
+					.process(exchange -> {
+						LocalDate forrigeVirkedag = finnForrigeVirkedag(clock);
+						exchange.setProperty(EXCHANGE_AVSTEMT_DATO, forrigeVirkedag);
+						if (erOffentligFridag(forrigeVirkedag)) {
+							log.info("{} var en offentlig fridag. Da blir avstemmingsfiler vanligvis ikke sendt.", forrigeVirkedag);
+						}
+						else {
+							log.error("Fant ikke avstemmingsfil for {}. Forsøker å opprette Jira-sak.", forrigeVirkedag);
+							JiraResponse jiraResponse = opprettJiraService.opprettAvstemJiraOppgave(exchange.getIn().getBody(byte[].class), exchange);
+							log.info("Har opprettet Jira-sak med key={} for varsling om manglende avstemmingsfil.", jiraResponse.jiraIssueKey());
+						}
+					})
 				.otherwise()
-					.log(INFO, log, "Skanmothelse starter behandling av avstemmingsfil=${file:name}.")
+					.log(INFO, log, "Starter behandling av avstemmingsfil=${file:name}.")
 					.process(exchange -> {
 						exchange.setProperty(EXCHANGE_AVSTEMMINGSFIL_NAVN, simple("${file:name}"));
 						exchange.setProperty(EXCHANGE_AVSTEMT_DATO,  parseDatoFraFilnavn(exchange));
@@ -91,7 +106,7 @@ public class AvstemRoute extends RouteBuilder {
 					.choice()
 						.when(simple("${body}").isNotNull())
 							.setProperty(ANTALL_FILER_FEILET, simple("${body.size}"))
-							.log(INFO, log, "Skanmothelse fant ${body.size} feilende avstemmingsreferanser")
+							.log(INFO, log, "Fant ${body.size} feilende avstemmingsreferanser")
 							.marshal().csv()
 							.bean(opprettJiraService)
 							.log(INFO, log, "Har opprettet Jira-sak=${body.jiraIssueKey} for feilende skanmothelse avstemmingsreferanser")
@@ -99,7 +114,7 @@ public class AvstemRoute extends RouteBuilder {
 					.endChoice()
 				.endChoice()
 				.end()
-				.log(INFO, log, "Skanmothelse behandlet ferdig avstemmingsfil: ${file:name}");
+				.log(INFO, log, "Behandlet ferdig avstemmingsfil: ${file:name}");
 		// @formatter:on
 	}
 }
