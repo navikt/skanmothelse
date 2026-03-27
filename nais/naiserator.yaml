@@ -25,6 +25,8 @@ spec:
       value: /var/run/secrets/nais.io/skanmothelse/pgp/pgpprivatekey
     - name: SKANMOTHELSE_JIRA_URL
       value: {{ SKANMOTHELSE_JIRA_URL }}
+    - name: SKANMOTHELSE_SLACK_VARSEL_CRON
+      value: "{{ SKANMOTHELSE_SLACK_VARSEL_CRON }}"
   image: {{ image }}
   ingresses:
     {{#each INGRESSES}}
