@@ -6,7 +6,6 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Tags;
 import io.micrometer.core.instrument.Timer;
-import io.micrometer.core.lang.NonNullApi;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.skanmothelse.mdc.MDCConstants;
 import no.nav.skanmothelse.exceptions.functional.AbstractSkanmothelseFunctionalException;
@@ -22,7 +21,6 @@ import java.util.function.Function;
 import static java.util.Arrays.asList;
 
 @Aspect
-@NonNullApi
 @Incubating(since = "1.0.0")
 @Slf4j
 public class DokTimedAspect {

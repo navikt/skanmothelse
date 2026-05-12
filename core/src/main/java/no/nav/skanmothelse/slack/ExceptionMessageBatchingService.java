@@ -4,8 +4,7 @@ import com.slack.api.methods.SlackApiException;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.skanmothelse.config.properties.SlackProperties;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
+import org.springframework.resilience.annotation.Retryable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +28,7 @@ public class ExceptionMessageBatchingService {
 	}
 
 	@Scheduled(cron = "${skanmothelse.slack-varsel-cron}")
-	@Retryable(retryFor = {SlackApiException.class, IOException.class}, backoff = @Backoff(multiplier = 2, delay = 1000))
+	@Retryable(value = {SlackApiException.class, IOException.class}, multiplier = 2)
 	public void sendMeldinger() throws SlackApiException, IOException {
 		sendMeldingInternal();
 	}
