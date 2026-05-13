@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.resilience.annotation.EnableResilientMethods;
 
 @ComponentScan
 @EnableAutoConfiguration
@@ -23,7 +23,7 @@ import org.springframework.retry.annotation.EnableRetry;
 		JiraAuthProperties.class,
 		AzureProperties.class
 })
-@EnableRetry
+@EnableResilientMethods
 @Configuration
 public class ApplicationConfig {
 
