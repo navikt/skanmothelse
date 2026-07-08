@@ -44,7 +44,7 @@ public class JournalpostApiConsumer {
 	@Retryable(SkanmothelseTechnicalException.class)
 	public OpprettJournalpostResponse opprettJournalpost(OpprettJournalpostRequest opprettJournalpostRequest) {
 		return webClient.post()
-				.uri("/journalpost?foersoekFerdigstill=false")
+				.uri("/journalpostapi/v1/journalpost?foersoekFerdigstill=false")
 				.attributes(clientRegistrationId(CLIENT_REGISTRATION_DOKARKIV))
 				.header(HEADER_NAV_CALL_ID, MDC.get(MDC_CALL_ID))
 				.bodyValue(opprettJournalpostRequest)
@@ -58,7 +58,7 @@ public class JournalpostApiConsumer {
 	@Retryable(SkanmothelseTechnicalException.class)
 	public FeilendeAvstemmingReferanser feilendeAvstemmingReferanser(AvstemmingReferanser avstemmingReferanser) {
 		return webClient.post()
-				.uri("/avstemReferanser")
+				.uri("/internal/avstemReferanser")
 				.attributes(clientRegistrationId(CLIENT_REGISTRATION_DOKARKIV))
 				.header(HEADER_NAV_CALL_ID, MDC.get(MDC_CALL_ID))
 				.bodyValue(avstemmingReferanser)
