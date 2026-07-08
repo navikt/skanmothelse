@@ -1,6 +1,6 @@
 {
   "SKANMOTHELSE_JIRA_URL": "https://jira.adeo.no",
-  "SKANMOTHELSE_ENDPOINTS_DOKARKIV_URL": "http://dokarkiv.teamdokumenthandtering.svc.nais.local/rest/journalpostapi/v1",
+  "SKANMOTHELSE_ENDPOINTS_DOKARKIV_URL": "http://dokarkiv.teamdokumenthandtering.svc.nais.local/rest",
   "SKANMOTHELSE_ENDPOINTS_DOKARKIV_SCOPE": "api://prod-fss.teamdokumenthandtering.dokarkiv/.default",
   "SKANMOTHELSE_HELSE_SCHEDULE": "0+5/15+*+*+*+*",
   "SKANMOTHELSE_SLACK_VARSEL_CRON": "0 45 10 * * MON-FRI",
