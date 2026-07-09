@@ -68,6 +68,7 @@ spec:
     - secret: {{ SKANMOTHELSE_SECRET }}
     - secret: slack-alerts
     - secret: jira-service-user
+    - configmap: skanmothelse
   observability:
     logging:
       destinations:
