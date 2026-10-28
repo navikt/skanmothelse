@@ -8,7 +8,7 @@ import no.nav.dok.jiracore.exception.JiraClientException;
 import no.nav.skanmothelse.exceptions.functional.SkanmothelseFunctionalException;
 import org.apache.camel.Exchange;
 import org.apache.camel.Handler;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -20,12 +20,11 @@ import static java.time.DayOfWeek.MONDAY;
 import static org.apache.camel.Exchange.FILE_NAME_ONLY;
 
 @Slf4j
-@Component
+@Service
 public class OpprettJiraService {
 
 	private static final List<String> LABEL = List.of("skanmothelse-avvik");
 	private static final String DESCRIPTION = "Se vedlegg for en oversikt over manglende avstemmingsreferanser for skannede dokumenter fra skanmothelse \n";
-	private static final String JIRA_BRUKER_NAVN = "srvjiradokdistavstemming";
 	private static final String SUMMARY = "Skanmothelse: Manglende avstemmingsreferanser for skannede dokumenter";
 	public static final String ANTALL_FILER_AVSTEMT = "Antall filer avstemt";
 	public static final String ANTALL_FILER_FEILET = "Antall filer feilet";
@@ -61,7 +60,6 @@ public class OpprettJiraService {
 		return jiraService.opprettJiraMMAOppgave(JiraRequest.builder()
 				.summary("Skanmothelse: Avstemmingfil mangler for " + avstemmingsfilDato)
 				.description("Skanmothelse fant ikke avstemmingsfil for " + avstemmingsfilDato + ". Undersøk tilfellet og evt. kontakt Iron Mountain.")
-				.reporterName(JIRA_BRUKER_NAVN)
 				.labels(LABEL)
 				.build());
 	}
@@ -70,7 +68,6 @@ public class OpprettJiraService {
 		return JiraRequest.builder()
 				.summary(SUMMARY)
 				.description(prettifySummary(DESCRIPTION, antallAvstemt, antallFeilet))
-				.reporterName(JIRA_BRUKER_NAVN)
 				.labels(LABEL)
 				.vedlegg(csvByte)
 				.avstemmingsfilDato(avstemmingsfilDato)
