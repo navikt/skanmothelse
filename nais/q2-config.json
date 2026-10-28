@@ -1,7 +1,7 @@
 {
   "SKANMOTHELSE_ENDPOINTS_DOKARKIV_URL": "http://dokarkiv.teamdokumenthandtering.svc.nais.local/rest",
   "SKANMOTHELSE_ENDPOINTS_DOKARKIV_SCOPE": "api://dev-fss.teamdokumenthandtering.dokarkiv/.default",
-  "SKANMOTHELSE_JIRA_URL": "https://jira-q1.adeo.no",
+  "SKANMOTHELSE_JIRA_URL": "https://api.atlassian.com/ex/jira/e083e647-072b-4276-9112-8c18871dbafd",
   "SKANMOTHELSE_SLACK_VARSEL_CRON": "0 0 * * * *",
   "SKANMOTHELSE_HELSE_SCHEDULE": "0+*/5+*+*+*+*",
   "SKANMOTHELSE_SECRET": "skanmothelse-q2",
